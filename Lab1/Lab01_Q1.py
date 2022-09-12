@@ -7,7 +7,7 @@
 #  This python script contains the pseudo-code and explantion for Q1b the code, 
 # plots and explanations for Q1c and code, plots and explanation for Q1d. 
 
-######## Q1b #########
+############################################ Q1b ################################################
 
 # Define/import needed physical constants from the scipy.constant library 
 # Define the initial conditions for x0 and y0 and vx0  and vy0
@@ -20,7 +20,7 @@
 # Compute ith element of vx and vy using ith-1 vx and vy, the ith ax, ay, and dt
 # Plot the positions x vs y and the vx vs t and vy vs time 
 
-######## Q1c #########
+############################################ Q1c ################################################
 # Import libraries
 import numpy as np
 import scipy.constants as c
@@ -54,6 +54,52 @@ x[0] = x0
 y[0] = y0
 vx[0] = vx0
 vy[0] = vy0
+
+
+# Run for loop from 1 to len(t) and compute ith elements
+for i in range(1,len(t)):
+    # Compute r from previous iteration
+    r = np.sqrt(x[i-1]**2 + y[i-1]**2)
+    # Compute acceleration
+    ax[i] = -G*Ms*x[i-1]/r**3
+    ay[i] = -G*Ms*y[i-1]/r**3
+    # Compute velocity
+    vx[i] = vx[i-1] + dt*ax[i]
+    vy[i] = vy[i-1] + dt*ay[i]
+    # Compute position
+    x[i] = x[i-1] + dt*vx[i]
+    y[i] = y[i-1] + dt*vy[i]
+
+
+# Plot results
+fig, (a0,a1,a2) = plt.subplots(figsize=(15,5),ncols=3)
+
+a0.plot(x,y,c='k')
+a0.set_title("Mercury's orbit",fontsize=16)
+a0.set_xlabel("X-Position [AU]",fontsize=14)
+a0.set_ylabel("Y-Position [AU]",fontsize=14)
+a0.grid(ls='--')
+
+
+a1.plot(t,vx,c='r')
+a1.set_title("X-velocity component evolution",fontsize=16)
+a1.set_ylabel(r"$V_x$",fontsize=14)
+a1.set_xlabel("Time [yr]",fontsize=14)
+a1.grid(ls='--')
+
+a2.plot(t,vy,c='gray')
+a2.set_title("Y-velocity component evolution",fontsize=16)
+a2.set_ylabel(r"$V_y$",fontsize=14)
+a2.set_xlabel("Time [yr]",fontsize=14)
+a2.grid(ls='--')
+
+plt.tight_layout()
+plt.show()
+
+############################################ Q1c ################################################
+# The code is exactly the same with the only difference being the (1+alpha/r^2) term in the 
+# computation for the acceleration
+
 
 # Run for loop from 1 to len(t) and compute ith elements
 for i in range(1,len(t)):
