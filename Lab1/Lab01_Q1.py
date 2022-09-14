@@ -94,7 +94,7 @@ a2.grid(ls='--')
 
 plt.tight_layout()
 plt.savefig("Q1c-Plot.png")
-plt.show()
+
 
 ############################################ Q1d ################################################
 # The code is exactly the same with the only difference being the (1+alpha/r^2) term in the 
