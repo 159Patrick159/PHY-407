@@ -35,7 +35,6 @@ vy0 = 8.17 # AU/yr
 G = c.G # m3/s2/kg
 G = G * (6.8459e-12)**3 * (3.154e7)**2 # AU3/yr2/kg
 Ms = 1.98847e30 # kg
-alpha = 0.01 # AU2
 
 # Define timestep and time vector
 dt = 0.0001
@@ -75,31 +74,33 @@ for i in range(1,len(t)):
 fig, (a0,a1,a2) = plt.subplots(figsize=(15,5),ncols=3)
 
 a0.plot(x,y,c='k')
-a0.set_title("Mercury's orbit",fontsize=16)
-a0.set_xlabel("X-Position [AU]",fontsize=14)
-a0.set_ylabel("Y-Position [AU]",fontsize=14)
+a0.set_title("Mercury's orbit",fontsize=18)
+a0.set_xlabel("X-Position [AU]",fontsize=16)
+a0.set_ylabel("Y-Position [AU]",fontsize=16)
 a0.grid(ls='--')
 
 
 a1.plot(t,vx,c='r')
-a1.set_title("X-velocity component evolution",fontsize=16)
-a1.set_ylabel(r"$V_x$",fontsize=14)
-a1.set_xlabel("Time [yr]",fontsize=14)
+a1.set_title("X-velocity component evolution",fontsize=18)
+a1.set_ylabel(r"$V_x$",fontsize=16)
+a1.set_xlabel("Time [yr]",fontsize=16)
 a1.grid(ls='--')
 
 a2.plot(t,vy,c='gray')
-a2.set_title("Y-velocity component evolution",fontsize=16)
-a2.set_ylabel(r"$V_y$",fontsize=14)
-a2.set_xlabel("Time [yr]",fontsize=14)
+a2.set_title("Y-velocity component evolution",fontsize=18)
+a2.set_ylabel(r"$V_y$",fontsize=16)
+a2.set_xlabel("Time [yr]",fontsize=16)
 a2.grid(ls='--')
 
 plt.tight_layout()
+plt.savefig("Q1c-Plot.png")
 plt.show()
 
-############################################ Q1c ################################################
+############################################ Q1d ################################################
 # The code is exactly the same with the only difference being the (1+alpha/r^2) term in the 
 # computation for the acceleration
 
+alpha = 0.01 # AU2
 
 # Run for loop from 1 to len(t) and compute ith elements
 for i in range(1,len(t)):
@@ -119,16 +120,16 @@ for i in range(1,len(t)):
 fig, (a0,a1,a2) = plt.subplots(figsize=(15,5),ncols=3)
 
 a0.plot(x,y,c='k')
-a0.set_title("Mercury's orbit",fontsize=16)
-a0.set_xlabel("X-Position [AU]",fontsize=14)
-a0.set_ylabel("Y-Position [AU]",fontsize=14)
+a0.set_title("Mercury's orbit",fontsize=18)
+a0.set_xlabel("X-Position [AU]",fontsize=16)
+a0.set_ylabel("Y-Position [AU]",fontsize=16)
 a0.grid(ls='--')
 
 
 a1.plot(t,vx,c='r')
-a1.set_title("X-velocity component evolution",fontsize=16)
-a1.set_ylabel(r"$V_x$",fontsize=14)
-a1.set_xlabel("Time [yr]",fontsize=14)
+a1.set_title("X-velocity component evolution",fontsize=18)
+a1.set_ylabel(r"$V_x$",fontsize=16)
+a1.set_xlabel("Time [yr]",fontsize=16)
 a1.grid(ls='--')
 
 a2.plot(t,vy,c='gray')
@@ -138,6 +139,7 @@ a2.set_xlabel("Time [yr]",fontsize=14)
 a2.grid(ls='--')
 
 plt.tight_layout()
+plt.savefig("Q1d-Plot.png")
 plt.show()
 
 
