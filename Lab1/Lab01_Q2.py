@@ -261,6 +261,9 @@ plt.ylabel('y-Position [AU]', fontsize=16)
 plt.title("Asteroid and Jupiter orbit over 20 Earth year", fontsize=16)
 plt.grid('on')
 plt.legend(loc='lower right')
+<<<<<<< HEAD
 plt.savefig('Q2c-Plot.png')
 
+=======
+>>>>>>> e101bd8587053789d2321dbd8222c1181f7fd443
 plt.show()
