@@ -39,7 +39,7 @@ import MyFunctions as myf
 # Constants
 G = 39.5        # [AU^3 * M_sol^-1 yr^-2] Graviational Constants 
 M_sol = 1.0     # Solar Mass
-M_J = 10e-3     # Jupiter Mass
+M_j = 1e-3      # Jupiter Mass
 alpha = 0.01    # [AU^2] Precession
 
 # Function to calculate the distance between Earth and Jupiter
@@ -96,8 +96,8 @@ for i in range(0, len(t)-1):
     r_E_to_J = myf.earth_jupiter_distance(x_E[i], y_E[i], x_J[i], y_J[i])
     
     # Calculate acceleration
-    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) + (G*M_J* (x_J[i]-x_E[i])/r_E_to_J**3)
-    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) + (G*M_J* (y_J[i]-y_E[i])/r_E_to_J**3)
+    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) + (G*M_j* (x_J[i]-x_E[i])/r_E_to_J**3)
+    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) + (G*M_j* (y_J[i]-y_E[i])/r_E_to_J**3)
     
     vx_E[i+1] = vx_E[i] + ax*dt
     vy_E[i+1] = vy_E[i] + ay*dt
@@ -121,7 +121,7 @@ plt.savefig('Q2a-Plot.png')
 ############################# Q2b ############################################
 
 # Set Jupiter mass to be same as the mass of Sun
-M_J = 1.0   # [M_sol]
+M_j = 1.0   # [M_sol]
 
 # Build time array
 dt = 0.0001             # [year]
@@ -170,8 +170,8 @@ for i in range(0, len(t)-1):
     r_E_to_J = myf.earth_jupiter_distance(x_E[i], y_E[i], x_J[i], y_J[i])
     
     # Calculate acceleration
-    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) + (G*M_J* (x_J[i]-x_E[i])/r_E_to_J**3)
-    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) + (G*M_J* (y_J[i]-y_E[i])/r_E_to_J**3)
+    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) + (G*M_j* (x_J[i]-x_E[i])/r_E_to_J**3)
+    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) + (G*M_j* (y_J[i]-y_E[i])/r_E_to_J**3)
     
     vx_E[i+1] = vx_E[i] + ax*dt
     vy_E[i+1] = vy_E[i] + ay*dt
@@ -195,7 +195,7 @@ plt.savefig('Q2b-Plot.png')
 ################################ Q2c #########################################
 
 # Set Jupiter's mass back to normal 
-M_J = 10e-3
+M_j = 1e-3
 
 # Build time array
 dt = 0.0001             # [year]
@@ -244,8 +244,8 @@ for i in range(0, len(t)-1):
     r_a_to_J = myf.earth_jupiter_distance(x_a[i], y_a[i], x_J[i], y_J[i])
     
     # Calculate acceleration
-    ax = -(G*M_sol* x_a[i]/r_a_to_Sun**3) + (G*M_J* (x_J[i]-x_a[i])/r_a_to_J**3)
-    ay = -(G*M_sol* y_a[i]/r_a_to_Sun**3) + (G*M_J* (y_J[i]-y_a[i])/r_a_to_J**3)
+    ax = -(G*M_sol* x_a[i]/r_a_to_Sun**3) + (G*M_j* (x_J[i]-x_a[i])/r_a_to_J**3)
+    ay = -(G*M_sol* y_a[i]/r_a_to_Sun**3) + (G*M_j* (y_J[i]-y_a[i])/r_a_to_J**3)
     
     vx_a[i+1] = vx_a[i] + ax*dt
     vy_a[i+1] = vy_a[i] + ay*dt
@@ -261,9 +261,6 @@ plt.ylabel('y-Position [AU]', fontsize=16)
 plt.title("Asteroid and Jupiter orbit over 20 Earth year", fontsize=16)
 plt.grid('on')
 plt.legend(loc='lower right')
-<<<<<<< HEAD
 plt.savefig('Q2c-Plot.png')
 
-=======
->>>>>>> e101bd8587053789d2321dbd8222c1181f7fd443
 plt.show()
