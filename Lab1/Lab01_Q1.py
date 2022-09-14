@@ -13,11 +13,11 @@
 # Define the initial conditions for x0 and y0 and vx0  and vy0
 # Define a time step (dt)
 # Create and array for the time of the simulation with the prev. defined dt
-# Create arrays of zeros for ax, ay, vx, vy, x, and y with the same length of the time domain
+# Create and arrays of zeros for ax, ay, vx, vy, x, and y with the same length of the time domain
 # Run a for loop from 1 to len(t) iterations
-# Compute prev. instance r from x[i-1] and y[i-1]
-# Compute the ith accelration from derived 1st order ode using the prev. position and distance instances
-# Compute ith element of vx and vy using ith-1 vx and vy, the ith ax, ay, and dt
+#   Compute prev. instance r from x[i-1] and y[i-1]
+#    Compute the ith accelration from derived 1st order ode using the prev. position and distance instances
+#   Compute ith element of vx and vy using ith-1 vx and vy, the ith ax, ay, and dt
 # Plot the positions x vs y and the vx vs t and vy vs time 
 
 ############################################ Q1c ################################################
@@ -41,6 +41,7 @@ dt = 0.0001
 t = np.arange(0,1,dt)
 
 # Define zero vectors for x,y,vx,vy,ax,ay
+r = np.zeros(len(t))
 x = np.zeros(len(t))
 y = np.zeros(len(t))
 vx = np.zeros(len(t))
@@ -58,10 +59,10 @@ vy[0] = vy0
 # Run for loop from 1 to len(t) and compute ith elements
 for i in range(1,len(t)):
     # Compute r from previous iteration
-    r = np.sqrt(x[i-1]**2 + y[i-1]**2)
+    r[i-1] = np.sqrt(x[i-1]**2 + y[i-1]**2)
     # Compute acceleration
-    ax[i] = -G*Ms*x[i-1]/r**3
-    ay[i] = -G*Ms*y[i-1]/r**3
+    ax[i] = -G*Ms*x[i-1]/r[i-1]**3
+    ay[i] = -G*Ms*y[i-1]/r[i-1]**3
     # Compute velocity
     vx[i] = vx[i-1] + dt*ax[i]
     vy[i] = vy[i-1] + dt*ay[i]
@@ -69,14 +70,27 @@ for i in range(1,len(t)):
     x[i] = x[i-1] + dt*vx[i]
     y[i] = y[i-1] + dt*vy[i]
 
+# Compute magnitude of angular momentum vector
+L = r*np.sqrt(vx**2 + vy**2)
+fig, a0 = plt.subplots(figsize=(12,4),ncols=1)
+a0.scatter(t,L,s=5,c='k')
+a0.set_ylim([3.8,4])
+a0.grid(ls='--')
+a0.set_ylabel(r"|L|$^2$",fontsize=16)
+a0.set_xlabel("Time [yr]",fontsize=16)
+a0.set_title("Angular Momentum Evolution",fontsize=18)
+plt.tight_layout()
+plt.savefig("L-Plot.png")
 
 # Plot results
 fig, (a0,a1,a2) = plt.subplots(figsize=(15,5),ncols=3)
 
 a0.plot(x,y,c='k')
+a0.scatter(0,0,c='k',label='Sun')
 a0.set_title("Mercury's orbit",fontsize=18)
 a0.set_xlabel("X-Position [AU]",fontsize=16)
 a0.set_ylabel("Y-Position [AU]",fontsize=16)
+a0.legend()
 a0.grid(ls='--')
 
 
@@ -120,9 +134,11 @@ for i in range(1,len(t)):
 fig, (a0,a1,a2) = plt.subplots(figsize=(15,5),ncols=3)
 
 a0.plot(x,y,c='k')
+a0.scatter(0,0,c='k',label='Sun')
 a0.set_title("Mercury's orbit",fontsize=18)
 a0.set_xlabel("X-Position [AU]",fontsize=16)
 a0.set_ylabel("Y-Position [AU]",fontsize=16)
+a0.legend()
 a0.grid(ls='--')
 
 
