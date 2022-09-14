@@ -1,6 +1,6 @@
 # Collaborators:
 # Patrick Sandoval
-# Kelvin Leung
+# Kelvin Leong
 
 ########################### HEADER ###############################
 # This python script times the matrix multiplication of 2 NxN matrices

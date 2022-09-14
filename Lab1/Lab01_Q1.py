@@ -1,7 +1,7 @@
 
 # Collaborators:
 # Patrick Sandoval
-# Kelvin Leung
+# Kelvin Leong
 
 ########################### HEADER ###############################
 #  This python script contains the pseudo-code and explantion for Q1b the code, 
