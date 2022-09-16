@@ -63,7 +63,6 @@ x_E = np.zeros(len(t))
 y_E = np.zeros(len(t))
 vx_E = np.zeros(len(t))
 vy_E = np.zeros(len(t))
-
 x_J = np.zeros(len(t))
 y_J = np.zeros(len(t))
 vx_J = np.zeros(len(t))
@@ -84,10 +83,11 @@ vy_J[0] = 2.63  # [AU/yr]
 for i in range(0, len(t)-1):
     r_J = np.sqrt(x_J[i]**2 + y_J[i]**2)
     
-    # Calculate acceleration
+    # Calculate acceleration of Jupiter due to Sun
     ax = -G * M_sol * x_J[i]/r_J**3
     ay = -G * M_sol * y_J[i]/r_J**3
 
+    # Update next velocity and position for Jupiter 
     vx_J[i+1] = vx_J[i] + ax*dt
     vy_J[i+1] = vy_J[i] + ay*dt
     x_J[i+1] = x_J[i] + vx_J[i+1]*dt
@@ -99,16 +99,17 @@ for i in range(0, len(t)-1):
     r_E_to_Sun = np.sqrt(x_E[i]**2 + y_E[i]**2)
     r_E_to_J = myf.earth_jupiter_distance(x_E[i], y_E[i], x_J[i], y_J[i])
     
-    # Calculate acceleration
+    # Calculate acceleration of Earth due to Sun and Jupiter
     ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) - (G*M_j* (x_E[i]-x_J[i])/r_E_to_J**3)
     ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) - (G*M_j* (y_E[i]-y_J[i])/r_E_to_J**3)
     
+    # Update next velocity and position for Earth
     vx_E[i+1] = vx_E[i] + ax*dt
     vy_E[i+1] = vy_E[i] + ay*dt
     x_E[i+1] = x_E[i] + vx_E[i+1]*dt
     y_E[i+1] = y_E[i] + vy_E[i+1]*dt
     
-    
+# Plot X v.s. Y of the planets
 fig = plt.figure(figsize=(8, 8))
 plt.plot(0,0,'k.', label='Sun')
 plt.plot(x_E, y_E, label="Earth's orbit")
@@ -158,10 +159,11 @@ vy_J[0] = 2.63  # [AU/yr]
 for i in range(0, len(t)-1):
     r_J = np.sqrt(x_J[i]**2 + y_J[i]**2)
     
-    # Calculate acceleration
+    # Calculate acceleration of Jupiter due to Sun
     ax = -G * M_sol * x_J[i]/r_J**3
     ay = -G * M_sol * y_J[i]/r_J**3
 
+    # Update next velocity and position of Jupiter
     vx_J[i+1] = vx_J[i] + ax*dt
     vy_J[i+1] = vy_J[i] + ay*dt
     x_J[i+1] = x_J[i] + vx_J[i+1]*dt
@@ -173,16 +175,17 @@ for i in range(0, len(t)-1):
     r_E_to_Sun = np.sqrt(x_E[i]**2 + y_E[i]**2)
     r_E_to_J = myf.earth_jupiter_distance(x_E[i], y_E[i], x_J[i], y_J[i])
     
-    # Calculate acceleration
+    # Calculate acceleration of Earth due to Sun and Jupiter
     ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) - (G*M_j* (x_E[i]-x_J[i])/r_E_to_J**3)
     ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) - (G*M_j* (y_E[i]-y_J[i])/r_E_to_J**3)
     
+    # Update next velocity and position for Earth
     vx_E[i+1] = vx_E[i] + ax*dt
     vy_E[i+1] = vy_E[i] + ay*dt
     x_E[i+1] = x_E[i] + vx_E[i+1]*dt
     y_E[i+1] = y_E[i] + vy_E[i+1]*dt
     
-    
+# Plotting
 fig = plt.figure(figsize=(8, 8))
 plt.plot(0,0,'k.', label='Sun')
 plt.plot(x_E, y_E, label="Earth's orbit")
@@ -241,9 +244,9 @@ for i in range(0, len(t)-1):
     x_J[i+1] = x_J[i] + vx_J[i+1]*dt
     y_J[i+1] = y_J[i] + vy_J[i+1]*dt
     
-# Using Euler-Cromer method to simulate Earth's orbit due to Sun and Jupiter
+# Using Euler-Cromer method to simulate asteroid's orbit due to Sun and Jupiter
 for i in range(0, len(t)-1):
-    # Calculate distance from Earth to Sun and from Earth to Jupiter
+    # Calculate distance from asteroid to Sun and from asteroid to Jupiter
     r_a_to_Sun = np.sqrt(x_a[i]**2 + y_a[i]**2)
     r_a_to_J = myf.earth_jupiter_distance(x_a[i], y_a[i], x_J[i], y_J[i])
     
@@ -256,6 +259,7 @@ for i in range(0, len(t)-1):
     x_a[i+1] = x_a[i] + vx_a[i+1]*dt
     y_a[i+1] = y_a[i] + vy_a[i+1]*dt
 
+# Plotting
 fig = plt.figure(figsize=(8, 8))
 plt.plot(0,0,'k.', label='Sun')
 plt.plot(x_a, y_a, label="Asteroid's orbit")
