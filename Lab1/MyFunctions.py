@@ -5,7 +5,9 @@ Created on Wed Sep 14 10:15:32 2022
 @Collaborator:  Kelvin Leong
                 Patrick Sandoval
 """
-# The file stores our own defined functions
+########################### HEADER ###############################
+#  This python script contains our own defined functions
+###################################################################
 import numpy as np
 
 # Function to calculate the distance between Earth and Jupiter
