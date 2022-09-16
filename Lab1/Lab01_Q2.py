@@ -6,6 +6,10 @@ Created on Tue Sep 13 11:04:32 2022
 @Collaborator:  Kelvin Leong
                 Patrick Sandoval
 """
+########################### HEADER ###############################
+#  This python script contains the pseudo-code, code to calculate 
+# Jupiter's and Earth's orbit (Euler-Cromer method) and plots for Q2a 
+# codes and plots for Q2b and Q2c 
 
 #%%
 ############################### Q2a ##########################################
@@ -16,7 +20,7 @@ Created on Tue Sep 13 11:04:32 2022
     # Create a time array t based on the defined dt and end_time
     # Initialize arrays of zeros x, y, vx, and vy with length the same as t for Earth and Jupiter respectively
     # Set the first element of the arrays to the initial conditions of Earth and Jupiter given in lab
-    # (Use Euler-Cromer)
+    # (Use Euler-Cromer method from PHY254)
     # Run a for-loop from 0 to len(t)-1 iterations:
         # Compute current distance of Jupiter from Sun using x_J[i] and y_J[i]
         # Calculate current accelerations ax and ay based on eq(6) using current position x_J[i] and y_J[i]
@@ -96,8 +100,8 @@ for i in range(0, len(t)-1):
     r_E_to_J = myf.earth_jupiter_distance(x_E[i], y_E[i], x_J[i], y_J[i])
     
     # Calculate acceleration
-    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) + (G*M_j* (x_J[i]-x_E[i])/r_E_to_J**3)
-    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) + (G*M_j* (y_J[i]-y_E[i])/r_E_to_J**3)
+    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) - (G*M_j* (x_E[i]-x_J[i])/r_E_to_J**3)
+    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) - (G*M_j* (y_E[i]-y_J[i])/r_E_to_J**3)
     
     vx_E[i+1] = vx_E[i] + ax*dt
     vy_E[i+1] = vy_E[i] + ay*dt
@@ -170,8 +174,8 @@ for i in range(0, len(t)-1):
     r_E_to_J = myf.earth_jupiter_distance(x_E[i], y_E[i], x_J[i], y_J[i])
     
     # Calculate acceleration
-    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) + (G*M_j* (x_J[i]-x_E[i])/r_E_to_J**3)
-    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) + (G*M_j* (y_J[i]-y_E[i])/r_E_to_J**3)
+    ax = -(G*M_sol* x_E[i]/r_E_to_Sun**3) - (G*M_j* (x_E[i]-x_J[i])/r_E_to_J**3)
+    ay = -(G*M_sol* y_E[i]/r_E_to_Sun**3) - (G*M_j* (y_E[i]-y_J[i])/r_E_to_J**3)
     
     vx_E[i+1] = vx_E[i] + ax*dt
     vy_E[i+1] = vy_E[i] + ay*dt
@@ -185,7 +189,7 @@ plt.plot(x_E, y_E, label="Earth's orbit")
 plt.plot(x_J, y_J, label="Jupiter's orbit")
 plt.xlabel('x-Position [AU]', fontsize=16)
 plt.ylabel('y-Position [AU]', fontsize=16)
-plt.title("Earth and Jupiter (1000x mass) orbit", fontsize=16)
+plt.title("Earth and Jupiter (1000x mass) orbit after 3.58 years", fontsize=16)
 plt.grid('on')
 plt.legend()
 plt.savefig('Q2b-Plot.png')
@@ -244,8 +248,8 @@ for i in range(0, len(t)-1):
     r_a_to_J = myf.earth_jupiter_distance(x_a[i], y_a[i], x_J[i], y_J[i])
     
     # Calculate acceleration
-    ax = -(G*M_sol* x_a[i]/r_a_to_Sun**3) + (G*M_j* (x_J[i]-x_a[i])/r_a_to_J**3)
-    ay = -(G*M_sol* y_a[i]/r_a_to_Sun**3) + (G*M_j* (y_J[i]-y_a[i])/r_a_to_J**3)
+    ax = -(G*M_sol* x_a[i]/r_a_to_Sun**3) - (G*M_j* (x_a[i]-x_J[i])/r_a_to_J**3)
+    ay = -(G*M_sol* y_a[i]/r_a_to_Sun**3) - (G*M_j* (y_a[i]-y_J[i])/r_a_to_J**3)
     
     vx_a[i+1] = vx_a[i] + ax*dt
     vy_a[i+1] = vy_a[i] + ay*dt
