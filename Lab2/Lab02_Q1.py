@@ -29,11 +29,12 @@
 # Equation (2) does have the possibilit of taking the square root of a negative value
 # so we will need to implement a checker to stop the code if this indeed happens
 # 
-# Define variable for sum
+# Define variable for square sum
 # Run a for loop for N iterations
-#   square the ith entry and subtract the squared mean times N from it
-#   add value of operation to sum
-# Once for loop is done check if sum variable is >0
+#   square the ith entry and add value to square sum variable
+# Compute square mean through square sum
+# Compute term square sum - N*square mean
+# Check if difference is >0
 # If condition fails print error message
 # If condition passes then we multiply by 1/(N-1) and take the square root
 # 
@@ -63,20 +64,11 @@ for val in data:
 std1 = np.sqrt((1/(N-1))*sum1)
 
 # Method 2
-#sum2 = 0
-#for val in data:
-    #sum2 =+ val**2 - N*xbar**2
-# Create checker for negative sum
-
-# flag = True
-# if sum2 < 0:
-#     flag = False
-# else:
-#     std2 = np.sqrt((1/(N-1))*sum2)
-
-# New approach
-term = np.sum(data**2) - N*xbar**2
-
+square_sum = 0
+for val in data:
+    square_sum =+ val**2
+square_xbar = square_sum/N**2
+term = square_sum-N*square_xbar
 # Impement checker
 flag=True
 if term<0:
@@ -98,7 +90,7 @@ if flag:
 else:
     print("One Pass: Cannot take sqrt of negative numbers") 
 
-
+print()
 
 ######################################## Q1.c ############################################
 
@@ -121,3 +113,44 @@ rel2 = (std2-sigma2)/sigma2
 # Print relative errors
 print("Relative error for mean = 0:",rel1)
 print("Relative error for mean = 1e7:",rel2)
+print()
+######################################## Q1.d ############################################
+# The issue with eq.2 from the lab manual is that sum of the squared elements loses some
+# of its decimal information due to the computers roundoff error of e16 sif figs. Because
+# this quantity is really big the roundoff error make the quantity
+# lose important decimal value information. And same thing happens with the term
+# N*xbar**2 where roundouff error reduces the precision of the value, and when we take the
+# difference of these two quantites the precision of the difference is no longer e16. 
+#
+# So we need to eliminate the 1 pass element and compute the difference term in a single run
+# 
+# Call find_mean to compute the mean of the data set
+# Compute the difference term using np.sum() and specifying the input to be the square of 
+# the data entries.
+# Create condition for negative values
+# Compute relative errors
+# Print out result
+
+# Compute mean
+xbar3 = find_mean(data)
+# Compute term of interest in a single line
+term3 = np.sum(data**2) - N*xbar3**2
+
+# Impement checker
+flag=True
+if term3<0:
+    flag = False
+else:
+    std2 = np.sqrt((1/(N-1))*term3)
+
+#Compute relative error
+true = np.std(data,ddof=1)
+
+if flag:
+    rel_err2 = (std2-true)/true
+
+# Print relative errors
+if flag:
+    print("One Pass Improved Relative Error:",rel_err2)
+else:
+    print("One Pass: Cannot take sqrt of negative numbers") 
