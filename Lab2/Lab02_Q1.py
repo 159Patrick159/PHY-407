@@ -30,9 +30,11 @@
 # so we will need to implement a checker to stop the code if this indeed happens
 # 
 # Define variable for square sum
+# Define variable for normal sum
 # Run a for loop for N iterations
 #   square the ith entry and add value to square sum variable
-# Compute square mean through square sum
+#   add ith value like a normal sum
+# Compute square mean by dividing normal sum by N and squaring the result
 # Compute term square sum - N*square mean
 # Check if difference is >0
 # If condition fails print error message
@@ -46,6 +48,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import os
+from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 
 # Dynamically get current working directory
 current_directory = os.getcwd()
@@ -65,9 +68,12 @@ std1 = np.sqrt((1/(N-1))*sum1)
 
 # Method 2
 square_sum = 0
+norm_sum = 0
 for val in data:
     square_sum =+ val**2
-square_xbar = square_sum/N**2
+    norm_sum =+ val
+
+square_xbar = (norm_sum/N)**2
 term = square_sum-N*square_xbar
 # Impement checker
 flag=True
@@ -101,6 +107,29 @@ mean2, sigma2, N2 = 1e7, 1., 2000
 # Generate both Gaussian distributions for given parameters
 dist1 = np.random.normal(mean1,sigma1,N1)
 dist2 = np.random.normal(mean2,sigma2,N2)
+
+fig, (a0,a1) = plt.subplots(figsize=(10,4),ncols=2)
+a0.hist(dist1,bins = 'fd',density=True, color = 'k', histtype = 'step', alpha = 0.5)
+a0.axvline(x=np.mean(dist1),ls="--",c='r',label=r"\mu")
+a0.axvline(x=np.mean(dist1)+np.std(dist1),ls="--",c='k',label=r"\sigma")
+a0.axvline(x=np.mean(dist1)-np.std(dist1),ls="--",c='k')
+a0.plot(dist1,np.full_like(dist1, 0.01), '|k', markeredgewidth = 1, alpha = 0.1)
+a0.xaxis.set_minor_locator(MultipleLocator(0.2))
+a0.yaxis.set_minor_locator(MultipleLocator(0.01))
+a0.legend()
+a0.set_title(r"Gaussian Distribution with $\mu$=0")
+
+a1.hist(dist2,bins = 'fd',density=True, color = 'k', histtype = 'step', alpha = 0.5)
+a1.axvline(x=np.mean(dist2),ls="--",c='r',label="Mean")
+a1.axvline(x=np.mean(dist2)+np.std(dist2),ls="--",c='k',label=r"\sigma")
+a1.axvline(x=np.mean(dist2)-np.std(dist2),ls="--",c='k')
+a1.plot(dist2,np.full_like(dist1, 0.01), '|k', markeredgewidth = 1, alpha = 0.1)
+a1.xaxis.set_minor_locator(MultipleLocator(0.2e7))
+a1.yaxis.set_minor_locator(MultipleLocator(0.01))
+a1.legend()
+a1.set_title(r"Gaussian Distribution with $\mu=10^{7}$")
+plt.tight_layout()
+plt.show()
 
 # Compute the standard deviations using np.std
 std1 = np.std(dist1,ddof=1)

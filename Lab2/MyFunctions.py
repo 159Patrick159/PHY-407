@@ -4,7 +4,7 @@ def find_mean(data):
     return(np.sum(data)/len(data))
     
 # Calculate area under the curve using trapezoidal rules (eq. 5.3)
-def trapezoidal(a,b,N):
+def trapezoidal(f,a,b,N):
     # Width of slice
     h = (b - a) / N
     
@@ -15,7 +15,7 @@ def trapezoidal(a,b,N):
     return result
 
 # Calculate area under the curve using simpson's rules (eq. 5.9)
-def simpsons(a,b,N):
+def simpsons(f,a,b,N):
     # Width of slice
     h = (b - a) / N
     
