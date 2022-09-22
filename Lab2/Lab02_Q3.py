@@ -73,12 +73,19 @@ T4 = Tdomain**4
 def linear(x,m,c):
     return(x*m + c)
 
-popts,pcovs = curve_fit(linear,T4,Ws)
-poptq,pcovq = curve_fit(linear,T4,Wq)
+popts,pcovs = curve_fit(linear,T4,Ws,absolute_sigma=True)
+poptq,pcovq = curve_fit(linear,T4,Wq,absolute_sigma=True)
 
 # Print results
 print("Stefan-Boltzmann Constant from Simpson Routine:",popts[0])
 print("Stefan-Boltzmann Constant from scipy.integrate.quad Routine:",poptq[0])
+print("Stefan-Boltzmann Constant true value:",u.sigma)
+
+# Compute relative error
+rels = (popts[0] - u.sigma)/u.sigma
+relq = (poptq[0] - u.sigma)/u.sigma
+print("Simpson relative error:",rels)
+print("Quad relative error:",relq)
 
 # Set plotting style
 plt.rcParams['xtick.direction'] = 'in'
@@ -92,7 +99,7 @@ a0.plot(T4,linear(T4,*popts),c='r',label='Least-square fit',ls='--',zorder=2)
 a0.plot(T4,linear(T4,*poptq),c='r',ls='--',zorder=1)
 
 a0.set_xlabel(r"Quartic Temperature [K$^4$]",fontsize=14)
-a0.set_ylabel(r"Radiant Emittance [Watt $\cdot$ s$^{-1}$]",fontsize=14)
+a0.set_ylabel(r"Radiant Emittance [Watt $\cdot$ m$^{-2}$]",fontsize=14)
 a0.set_title("Estimating Stefan-Boltzmann Constant",fontsize=16)
 a0.xaxis.set_minor_locator(MultipleLocator(0.02e16))
 a0.yaxis.set_minor_locator(MultipleLocator(0.1e8))
