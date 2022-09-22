@@ -63,18 +63,19 @@ from MyFunctions import find_mean
 xbar = find_mean(data)
 sum1 = 0
 for val in data:
-    sum1 =+ (val - xbar)**2
+    sum1 += (val - xbar)**2
 std1 = np.sqrt((1/(N-1))*sum1)
 
 # Method 2
 square_sum = 0
 norm_sum = 0
 for val in data:
-    square_sum =+ val**2
-    norm_sum =+ val
+    square_sum += val**2
+    norm_sum += val
 
 square_xbar = (norm_sum/N)**2
 term = square_sum-(N*square_xbar)
+
 # Implement checker
 flag=True
 if term<0:
@@ -86,6 +87,7 @@ else:
 true = np.std(data,ddof=1)
 
 rel_err1 = (std1-true)/true
+print(std1,true)
 if flag:
     rel_err2 = (std2-true)/true
 
