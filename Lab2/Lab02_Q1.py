@@ -74,15 +74,15 @@ for val in data:
     norm_sum =+ val
 
 square_xbar = (norm_sum/N)**2
-term = square_sum-N*square_xbar
-# Impement checker
+term = square_sum-(N*square_xbar)
+# Implement checker
 flag=True
 if term<0:
     flag = False
 else:
     std2 = np.sqrt((1/(N-1))*term)
 
-#Compute reative error
+#Compute relative error
 true = np.std(data,ddof=1)
 
 rel_err1 = (std1-true)/true
@@ -108,10 +108,14 @@ mean2, sigma2, N2 = 1e7, 1., 2000
 dist1 = np.random.normal(mean1,sigma1,N1)
 dist2 = np.random.normal(mean2,sigma2,N2)
 
+# Define tick direction 
+plt.rcParams['xtick.direction'] = 'in'
+plt.rcParams['ytick.direction'] = 'in'
+
 fig, (a0,a1) = plt.subplots(figsize=(10,4),ncols=2)
 a0.hist(dist1,bins = 'fd',density=True, color = 'k', histtype = 'step', alpha = 0.5)
-a0.axvline(x=np.mean(dist1),ls="--",c='r',label=r"\mu")
-a0.axvline(x=np.mean(dist1)+np.std(dist1),ls="--",c='k',label=r"\sigma")
+a0.axvline(x=np.mean(dist1),ls="--",c='r',label=r"$\mu$")
+a0.axvline(x=np.mean(dist1)+np.std(dist1),ls="--",c='k',label=r"$\sigma$")
 a0.axvline(x=np.mean(dist1)-np.std(dist1),ls="--",c='k')
 a0.plot(dist1,np.full_like(dist1, 0.01), '|k', markeredgewidth = 1, alpha = 0.1)
 a0.xaxis.set_minor_locator(MultipleLocator(0.2))
@@ -120,15 +124,16 @@ a0.legend()
 a0.set_title(r"Gaussian Distribution with $\mu$=0")
 
 a1.hist(dist2,bins = 'fd',density=True, color = 'k', histtype = 'step', alpha = 0.5)
-a1.axvline(x=np.mean(dist2),ls="--",c='r',label="Mean")
-a1.axvline(x=np.mean(dist2)+np.std(dist2),ls="--",c='k',label=r"\sigma")
+a1.axvline(x=np.mean(dist2),ls="--",c='r',label=r"$\mu$")
+a1.axvline(x=np.mean(dist2)+np.std(dist2),ls="--",c='k',label=r"$\sigma$")
 a1.axvline(x=np.mean(dist2)-np.std(dist2),ls="--",c='k')
 a1.plot(dist2,np.full_like(dist1, 0.01), '|k', markeredgewidth = 1, alpha = 0.1)
-a1.xaxis.set_minor_locator(MultipleLocator(0.2e7))
+a1.xaxis.set_minor_locator(MultipleLocator(0.2))
 a1.yaxis.set_minor_locator(MultipleLocator(0.01))
 a1.legend()
 a1.set_title(r"Gaussian Distribution with $\mu=10^{7}$")
 plt.tight_layout()
+plt.savefig("Q1cPlot.png")
 plt.show()
 
 # Compute the standard deviations using np.std
@@ -144,16 +149,9 @@ print("Relative error for mean = 0:",rel1)
 print("Relative error for mean = 1e7:",rel2)
 print()
 ######################################## Q1.d ############################################
-# The issue with eq.2 from the lab manual is that sum of the squared elements loses some
-# of its decimal information due to the computers roundoff error of e16 sif figs. Because
-# this quantity is really big the roundoff error make the quantity
-# lose important decimal value information. And same thing happens with the term
-# N*xbar**2 where roundouff error reduces the precision of the value, and when we take the
-# difference of these two quantites the precision of the difference is no longer e16. 
-#
-# So we need to eliminate the 1 pass element and compute the difference term in a single run
 # 
 # Call find_mean to compute the mean of the data set
+# Square the mean and multiply by N
 # Compute the difference term using np.sum() and specifying the input to be the square of 
 # the data entries.
 # Create condition for negative values
@@ -161,11 +159,11 @@ print()
 # Print out result
 
 # Compute mean
-xbar3 = find_mean(data)
+#xbar3 = find_mean(data)
 # Compute term of interest in a single line
-term3 = np.sum(data**2) - N*xbar3**2
+term3 = np.sum(data**2) - N*(find_mean(data))**2
 
-# Impement checker
+# Implement checker
 flag=True
 if term3<0:
     flag = False
