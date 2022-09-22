@@ -85,7 +85,6 @@ else:
 
 #Compute relative error
 true = np.std(data,ddof=1)
-print("1",std1,"2",std2,"true",true)
 rel_err1 = (std1-true)/true
 if flag:
     rel_err2 = (std2-true)/true
