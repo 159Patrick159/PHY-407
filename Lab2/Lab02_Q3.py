@@ -1,3 +1,13 @@
+# Collaborators:
+# Patrick Sandoval
+# Kelvin Leong
+
+####################################### HEADER ###########################################
+# This python script holds the code and pseudocode for all the subquestion in Q2 of Lab02.
+# Additionally we explain some parts of the code and provide useful comments. This code
+# compares Simpson's rule and Scipy.integrate.quad rotuine by calculating the Stefan-Boltzmann
+# constant and testing its relative error.
+
 ######################################## Q3.b ############################################
 # Pseudo-code for integrating Plank's law.
 # Define intrgrand as shown in eq.8 of lab manual
@@ -80,7 +90,7 @@ poptq,pcovq = curve_fit(linear,T4,Wq,absolute_sigma=True)
 print("Stefan-Boltzmann Constant from Simpson Routine:",popts[0])
 print("Stefan-Boltzmann Constant from scipy.integrate.quad Routine:",poptq[0])
 print("Stefan-Boltzmann Constant true value:",u.sigma)
-
+print()
 # Compute relative error
 rels = (popts[0] - u.sigma)/u.sigma
 relq = (poptq[0] - u.sigma)/u.sigma
