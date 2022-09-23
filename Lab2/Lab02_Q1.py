@@ -216,7 +216,7 @@ print()
 # Call find_mean to compute the mean of the data set
 # Square the mean and multiply by N
 # Compute the difference term using np.sum() and specifying the input to be the square of 
-# the data entries.
+# the data entries with some shift that ceters the whole data around 0.
 # Create condition for negative values
 # Compute relative errors
 # Print out result
@@ -224,7 +224,9 @@ print()
 # Compute mean
 #xbar3 = find_mean(data)
 # Compute term of interest in a single line
-term3 = np.sum(data**2) - N*(find_mean(data))**2
+# Define offset term
+x0 = data[0]
+term3 = np.sum((data-x0)**2) - N*(find_mean(data-x0))**2
 
 # Implement checker
 flag=True
