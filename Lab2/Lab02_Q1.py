@@ -52,11 +52,11 @@ import os
 from matplotlib.ticker import MultipleLocator, AutoMinorLocator
 
 # Dynamically get current working directory
-current_directory = os.getcwd()
+# current_directory = os.getcwd()
 # Add filename to directory path
-file_path = current_directory + "\cdata.txt"
+# file_path = current_directory + "\cdata.txt"
 # Load data
-data = np.loadtxt(file_path)
+data = np.loadtxt("cdata.txt")
 N = len(data)
 
 # Method 1
