@@ -45,6 +45,7 @@
 
 ######################################## Q1.b ############################################
 # Import needed libraries
+from logging import raiseExceptions
 import numpy as np
 import matplotlib.pyplot as plt
 import os
@@ -136,17 +137,79 @@ plt.tight_layout()
 plt.savefig("Q1cPlot.png")
 plt.show()
 
-# Compute the standard deviations using np.std
-std1 = np.std(dist1,ddof=1)
-std2 = np.std(dist2,ddof=1)
+# Compute the standard deviations using eq.1 an eq.2 from lab manual
+# For dist 1
+xbar11 = find_mean(dist1)
+sum11 = 0
+for val in dist1:
+    sum11 += (val - xbar11)**2
+std11 = np.sqrt((1/(N1-1))*sum11)
+
+square_sum21 = 0
+norm_sum21 = 0
+for val in dist1:
+    square_sum21 += val**2
+    norm_sum21 += val
+
+square_xbar21 = (norm_sum21/N1)**2
+term21 = square_sum21-(N1*square_xbar21)
+
+# Implement checker
+flag1 = True
+if term21<0:
+    flag1 = False
+else:
+    std21 = np.sqrt((1/(N1-1))*term21)
+
+# For dist 2
+xbar12 = find_mean(dist2)
+sum12 = 0
+for val in data:
+    sum12 += (val - xbar12)**2
+std12 = np.sqrt((1/(N2-1))*sum12)
+
+square_sum22 = 0
+norm_sum22 = 0
+for val in dist2:
+    square_sum22 += val**2
+    norm_sum22 += val
+
+square_xbar22 = (norm_sum22/N2)**2
+term22 = square_sum22-(N2*square_xbar22)
+
+# Implement checker
+flag2 = True
+if term22<0:
+    flag2 = False
+else:
+    std22 = np.sqrt((1/(N2-1))*term22)
+
 
 # Compute relative error
-rel1 = (std1-sigma1)/sigma1
-rel2 = (std2-sigma2)/sigma2
+# For dist 1
+rel11 = (std11 - sigma1)/(sigma1)
+if flag1:
+    rel12 = (std21 - sigma2)/sigma2
+else:
+    print("Negative sqrt in dist1 method 2")
+    raiseExceptions("No imaginary numbers")
 
+# For dis 2
+rel21 = (std21 - sigma2)/(sigma2)
+if flag2:
+    rel22 = (std22 - sigma2)/(sigma2)
+else:
+    print("Negative sqrt in dist2 method 2")
 # Print relative errors
-print("Relative error for mean = 0:",rel1)
-print("Relative error for mean = 1e7:",rel2)
+print("Distribution with mean=0:")
+print("Relative error for two pass:",rel11)
+if flag1:
+    print("Relative error for one pass:",rel12)
+print()
+print("Distribution with mean=1e7:")
+print("Relative error for two pass:",rel21)
+if flag2:
+    print("Relative error for one pass:",rel22)
 print()
 ######################################## Q1.d ############################################
 # 
