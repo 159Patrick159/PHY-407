@@ -64,12 +64,15 @@ def gaussxwab(N,a,b):
     return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w
 
 # Define velocity function for Q2
-def v(x):
+def v(x,x0):
     #Define needed constants
     m = 1 # kg
     k = 12 # N/m
     c = 2.998e8 # m/s
-    x0 = 0.01 #mS
-
+    # Compute term
     term = c*np.sqrt((k*(x0**2-x**2)*(2*m*c**2 + k*(x0**2-x**2)/2))/(2*(m*c**2 + k*(x0**2-x**2)/2)**2))
     return(term)
+
+# Define function to integrate for Q2
+def Q2f(x,x0):
+    return(4/v(x,x0))
