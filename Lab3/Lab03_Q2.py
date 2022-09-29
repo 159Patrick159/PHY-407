@@ -8,13 +8,12 @@
 
 ######################################## Q2.a ############################################
 # Import needed libraries
-from random import gauss
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.ticker import MultipleLocator, AutoMinorLocator
+from matplotlib.ticker import MultipleLocator
 
 # Import gaussian quad functions
-from MyFunctions import gaussxw, gaussxwab, v
+from MyFunctions import gaussxw, gaussxwab, v, Q2f
 
 #Define needed constants
 m = 1 # kg
@@ -33,19 +32,15 @@ b = x0
 # Compute the sample points and weights using gaussxwab
 x1, w1 = gaussxwab(N1,a,b)
 x2, w2 = gaussxwab(N2,a,b)
-
-# Define function to integrate
-def f(x,x0):
-    return(4/v(x,x0))
  
 # Initialize integrals to 0
 I1 = 0
 I2 = 0
 
 for i in range(N1):
-    I1 += w1[i]*f(x1[i],x0)
+    I1 += w1[i]*Q2f(x1[i],x0)
 for j in range(N2):
-    I2 += w2[j]*f(x2[j],x0)
+    I2 += w2[j]*Q2f(x2[j],x0)
 
 # Compute period's true value 
 T_true = 2*np.pi*np.sqrt(m/k)
@@ -118,7 +113,7 @@ x3, w3 = gaussxwab(N3,a,b)
 # Sum over weighted elements 
 I3 = 0
 for i in range(N3):
-    I3 += w3[i]*f(x3[i],x0)
+    I3 += w3[i]*Q2f(x3[i],x0)
 
 # Compute fractional error
 frac3 = abs(I3-T_true)/I3
@@ -136,7 +131,7 @@ c = 2.998e8 # m/s
 xc = c*np.sqrt(m/k)
 
 # Create array of x0s
-x0a = np.linspace(1,20*xc,500)
+x0a = np.linspace(1,10*xc,500)
 
 # Define number of elements
 N = 500
@@ -149,20 +144,23 @@ T = []
 
 # Compute T for each x0
 for val in x0a:
+    # Set temp period
     T_tmp = 0
+
     # Adjust x and w for new bounds
     x4 = 0.5*(val)*x+0.5*(val)
     w4 = 0.5*(val)*w
 
     for i in range(N):
-        T_tmp += w4[i]*f(x4[i],val)
+        T_tmp += w4[i]*Q2f(x4[i],val)
     T.append(T_tmp)
 
 # Plot results
 fig, a0 = plt.subplots(figsize=(8,5),ncols=1)
 a0.plot(x0a,T,c='k')
-a0.set_xlabel(r"Amplitude x$_0$ [m]",fontsize=16)
-a0.set_ylabel("Period T [s]",fontsize=16)
+a0.set_title("Period of Relativistic Harmonic Oscillator for Large Applitude",fontsize=16)
+a0.set_xlabel(r"Amplitude x$_0$ [m]",fontsize=14)
+a0.set_ylabel("Period T [s]",fontsize=14)
 a0.xaxis.set_minor_locator(MultipleLocator(0.1e8))
 a0.yaxis.set_minor_locator(MultipleLocator(0.2))
 a0.yaxis.set_ticks_position('both') 
