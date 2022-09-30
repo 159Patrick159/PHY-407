@@ -7,6 +7,25 @@
 # as well as the plots for the relativistic particle in a spring.
 
 ######################################## Q2.a ############################################
+# Pseudo-code
+# 
+# Import needed libraries and functions to perform Gaussian quadrature integration
+# Define needed physical quantities
+# Define different values for N
+# Define initial displacement
+# Define boundaries
+# Define variables to store sums
+# Call gausswsab on the respective N's with the boundaries
+# Initialize a for loop for one of the N's
+#   Start summing up the weighted values of functions at the x's
+#   provided by gausswxab
+# Initialize another for loop for the remaining N
+#   Sum up the weighted values of the functions at the x's
+# Compute the theoretical classical period
+# Compute fractional error for each result
+# Print results
+
+##########################################################################################
 # Import needed libraries
 import matplotlib.pyplot as plt
 import numpy as np
@@ -55,6 +74,16 @@ print("Gaussian Quad N=16,",I2,'Frac. Error:',frac2)
 print()
 
 ######################################## Q2.b ############################################
+# Pseudo-code
+# 
+# Initialize arrays to store the values of integrands and weigted integrands
+# Set a for loop for one of the N's
+#   Compute the integrand and weighted integrand for that N and store in array
+# Set another for loop for the remaining N
+#   Compute integrand and weighted integrand and stor in respective array
+# Plot results
+
+##########################################################################################
 # Initialize arrays to populate with for loop
 N1_int = np.zeros(N1)
 N1_wint = np.zeros(N1)
@@ -76,8 +105,9 @@ plt.rcParams['ytick.direction'] = 'in'
 fig, (a0,a1) = plt.subplots(figsize=(12,4),ncols=2)
 a0.plot(np.arange(1,N1+1,1),N1_int,marker='o',c='r',label=r'N=8: 4/g$_i$')
 a0.plot(np.arange(1,N2+1,1),N2_int,marker='o',c='k',label=r'N=16: 4/g$_i$')
-a0.set_xlabel("Number of Samples N")
-a0.set_ylabel(r"Intgrand ( 4/g$_i$ )")
+a0.set_title("Period Integrand",fontsize=16)
+a0.set_xlabel("Number of Samples N",fontsize=14)
+a0.set_ylabel(r"Intgrand ( 4/g$_i$ )",fontsize=14)
 a0.xaxis.set_minor_locator(MultipleLocator(0.2))
 a0.yaxis.set_minor_locator(MultipleLocator(20))
 a0.yaxis.set_ticks_position('both') 
@@ -86,8 +116,9 @@ a0.legend()
 
 a1.plot(np.arange(1,N1+1,1),N1_wint,marker='o',c='r',label=r'N=8: 4w$_i$/g$_i$')
 a1.plot(np.arange(1,N2+1,1),N2_wint,marker='o',c='k',label=r'N=16: 4w$_i$/g$_i$')
-a1.set_xlabel("Number of Samples N")
-a1.set_ylabel(r"Weigthed Intgrand ( 4w$_i$/g$_i$ )")
+a1.set_title("Period Weighted Integrand",fontsize=16)
+a1.set_xlabel("Number of Samples N",fontsize=14)
+a1.set_ylabel(r"Weigthed Intgrand ( 4w$_i$/g$_i$ )",fontsize=14)
 a1.xaxis.set_minor_locator(MultipleLocator(0.2))
 a1.yaxis.set_minor_locator(MultipleLocator(0.01))
 a1.yaxis.set_ticks_position('both') 
@@ -101,6 +132,18 @@ plt.savefig("Q2bPlot.png")
 # Please refer to the written report for the full derivation
 
 ######################################## Q2.d ############################################
+# Pseudo-code
+# 
+# Define new number of samples
+# Get weights and x's from gausswx
+# Define summation variable
+# Start for loop
+#   Compute weighted sum 
+# Compute fractional error
+# Print results
+
+##########################################################################################
+
 # We will implement the same code from Q2a for a number of samples of N=200 for a small 
 # amplitude relativistic harmonic oscillator.
 
@@ -124,6 +167,21 @@ print("Gaussian Quadrature:",I3,"Frac. Error:",frac3)
 print()
 
 ######################################## Q2.e ############################################
+# Pseudo-code
+# 
+# Compute the critical displacement derived from prev. question
+# Initialze an array for x0's
+# Define the number of samples for Gaussina quad procedure
+# Call gausswa for the specified numbers
+# Define empty array to store periods
+# Iterate through x0
+# Set temporary variable for sum
+# Define new x and w for x0_ith upper bound
+# Perform weighted sum
+# Append result to period array
+# Plot results
+
+##########################################################################################
 # Define speed of light
 c = 2.998e8 # m/s
 
@@ -158,7 +216,7 @@ for val in x0a:
 # Plot results
 fig, a0 = plt.subplots(figsize=(8,5),ncols=1)
 a0.plot(x0a,T,c='k')
-a0.set_title("Period of Relativistic Harmonic Oscillator for Large Applitude",fontsize=16)
+a0.set_title("Period of Relativistic Harmonic Oscillator for Large Applitudes",fontsize=16)
 a0.set_xlabel(r"Amplitude x$_0$ [m]",fontsize=14)
 a0.set_ylabel("Period T [s]",fontsize=14)
 a0.xaxis.set_minor_locator(MultipleLocator(0.1e8))
