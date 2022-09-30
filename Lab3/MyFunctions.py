@@ -5,6 +5,7 @@
 ####################################### HEADER ###########################################
 # This python script holds all the functions for lab03 in the process of answering 
 # all the questions and subquestions.
+##########################################################################################
 import numpy as np
 
 # Define error funtion for Q1
@@ -76,3 +77,86 @@ def v(x,x0):
 # Define function to integrate for Q2
 def Q2f(x,x0):
     return(4/v(x,x0))
+
+
+
+# The Hermite Polynomials in Eq.9
+def Hermite_Polynomial(n,x,print_last_two=False):
+    """
+    Parameters: n: nth energy level, integer greater equal than 0
+                x: Position
+                print_last_two: (Optional) If True, will return last two Hermite 
+                                polynomials; Default=False
+    Return: nth Hermite Polynomial
+            (if print_last_two==True, nth and (n-1)th Hermite Polynomials)
+    """
+    # Define the base cases H0 and H1
+    # If argument x is a float, H0=1; if argument x is an array, H0=Array of 1
+    if type(x)==float or type(x)==np.float64:
+        H_0 = 1
+    else:
+        H_0 = np.ones(len(x))
+    H_1 = 2*x
+    
+    # Put the two base cases in the array
+    H_array = [H_0, H_1]
+    
+    # Calculate next Hermite Polynomial from the previous and this polynomial
+    # Then append to array
+    for i in range(1, n):
+        H_next = 2*x*H_array[i] - 2*i*H_array[i-1]
+        H_array.append(H_next)
+        
+    # If print_last_two==True, return nth and (n-1)th Hermite Polynomials
+    # Specifically used to calculate the first derivative of Hermite Polynomials
+    if print_last_two:
+        if n == 0: return H_0, 0    # if n=0 case, then return H0 and 0
+        return H_array[-1], H_array[-2]
+        
+    # Return the nth Hermite Polynomial
+    if n == 0: return H_0           # if n=0 case, then return H0
+    return H_array[-1]
+
+
+# Define the nth energy level wavefunction from Eq.8
+def Wave_function(n, x):
+    """
+    Parameters: n: nth energy level, integer greater equal than 0
+                x: Position
+    Return: nth wavefunction
+    """
+    H_n = Hermite_Polynomial(n, x)
+    return np.exp(-x**2/2)/np.sqrt(2**n * np.math.factorial(n) * np.sqrt(np.pi)) * H_n
+
+
+# Define the nth energy level first derivative of wavefunction from Eq.11
+def Wave_function_1st_derivative(n, x):
+    """
+    Parameters: n: nth energy level, integer greater equal than 0
+                x: Position
+    Return: 1st derivative of nth wavefunction
+    """
+    H_n, H_n_minus1 = Hermite_Polynomial(n, x, print_last_two=True)
+    return np.exp(-x**2/2)/np.sqrt(2**n * np.math.factorial(n) * np.sqrt(np.pi)) \
+        * (-x*H_n + 2*n*H_n_minus1)
+
+
+# Integrand in Eq.12 but with change of variables
+def integrand_expected_position_square(n,z):
+    """
+    Parameters: n : nth energy level, integer greater equal to zero
+                z : Position domain after change of variable
+    Return: Integrand of <x^2> after change of variable
+    """
+    Psi_n = Wave_function(n, np.tan(z))
+    return (np.tan(z)/np.cos(z))**2 * (abs(Psi_n))**2
+
+# Integrand in Eq.13 but with change of variables
+def integrand_expected_momentum_square(n,z):
+    """
+    Parameters: n : nth energy level, integer greater equal to zero
+                z : Position domain after change of variable
+    Return: Integrand of <p^2> after change of variable
+    """
+    dPsi_n = Wave_function_1st_derivative(n, np.tan(z))
+    return (abs(dPsi_n)/np.cos(z))**2
