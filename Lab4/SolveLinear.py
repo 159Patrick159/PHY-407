@@ -5,6 +5,15 @@
 # This module contains useful routines for solving linear systems of equations.
 # Based on gausselim.py from Newman
 #from numpy import empty
+
+
+############################## HEADER ########################################
+# This file contains GaussElim() function implemented from textbook and Profs
+# and our implementation of PartialPivot() function modified from the 
+# GaussElim() function
+##############################################################################
+
+
 # The following will be useful for partial pivoting
 from numpy import empty, copy, argmax
 
