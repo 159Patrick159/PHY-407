@@ -47,6 +47,11 @@ def GaussElim(A_in, v_in):
 
 def PartialPivot(A_in, v_in):
     """ In this function, code the partial pivot (see Newman p. 222) """
+    """
+    Parameter: A_in: Matrix of size NxN
+               v_in: Vector of size N
+    Return: x: Vector solution of A_in x = v_in
+    """
     # (Deep) copy A and v so the parameters remain unchanged
     A = copy(A_in)
     v = copy(v_in)
