@@ -96,5 +96,4 @@ plt.grid('on')
 plt.legend()
 plt.title("Error in solving N size linear system for each methods", fontsize=16)
 plt.savefig('Q1_error.png')
-
-    
+   
