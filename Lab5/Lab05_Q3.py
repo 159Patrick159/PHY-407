@@ -50,17 +50,12 @@ plt.show()
 G23 = np.copy(G2)
 G25 = np.copy(G2)
 m = 3
-n = 50
-# G23[:,:len(u)//2 + m] = 0
-# G23[:,len(u)//2 + m+1:] = 0
+n = 5
+G23[:,:len(u)//2 + m] = 0
+G23[:,len(u)//2 + m+1:] = 0
 
-# G25[:,:len(u)//2 + n] = 0
-# G25[:,len(u)//2 + n+1:] = 0
-
-G23[:,:m] = 0
-G23[:,m+1:] = 0
-G25[:,:n] = 0
-G25[:,n+1:] = 0
+G25[:,:len(u)//2 + n] = 0
+G25[:,len(u)//2 + n+1:] = 0
 
 # Take the inverse fourier of cleaned spectrum
 f23 = np.fft.ifft2(G23)
@@ -70,6 +65,7 @@ plt.contourf(Longitude,Times,np.abs(f23))
 plt.colorbar()
 plt.xlabel('longitude(degrees)')
 plt.ylabel('days since Jan. 1 2015')
+plt.title('SLP anomaly (hPa) for m=3')
 plt.savefig("Q3a3.pdf")
 plt.show()
 
@@ -77,6 +73,7 @@ plt.contourf(Longitude,Times,np.abs(f25))
 plt.colorbar()
 plt.xlabel('longitude(degrees)')
 plt.ylabel('days since Jan. 1 2015')
+plt.title('SLP anomaly (hPa) for m=5')
 plt.savefig("Q3a5.pdf")
 plt.show()
 
