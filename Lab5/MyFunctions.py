@@ -1,3 +1,7 @@
+#################################### HEADER ##################################
+#  This python file contains our own defined functions
+##############################################################################
+
 # Import needed libraries
 import numpy as np
 def Euler_Cromer1D(t,x0,v0,m,k,dt):
