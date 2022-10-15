@@ -90,7 +90,6 @@ f = np.fft.fftshift(np.fft.fftfreq(len(t),dt))
 
 # Check the periods of each wave
 f1 = f[np.where(G1==np.max(G1))]
-print("Frequency x0=1",abs(f1),"Period:",abs(1/f1) )
 
 # Plot results
 fig, a0 = plt.subplots(figsize=(8,4),ncols=1)
@@ -124,17 +123,20 @@ Tf3 = 1/f[np.where(G3 == np.max(np.abs(G3)))[-1]]
 # Initizlize periods from Lab03
 Tclassical = 1.8102536 # s
 T10xc = 11.6630122 # s
+Txc = 2.12705948 #s
 
 # Compute corresponding frequencies
 fclassical = 1/Tclassical
 f10xc = 1/T10xc
+fxc = 1/Txc
 
 # Plot results
 fig, a0 = plt.subplots(figsize=(8,4),ncols=1)
 a0.plot(f,G1,c='k',ls='--',label=r"$x_0$=1")
 a0.plot(f,G2,c='r',alpha=0.7,label=r"$x_0$=$x_c$")
 a0.plot(f,G3,c='k',alpha=0.8,label=r"$x_0$=10$x_c$")
-a0.axvline(x=fclassical,ls='-.',c='orange',label='x=x$_c$')
+a0.axvline(x=fclassical,ls='-.',c='orange',label='x=1')
+a0.axvline(x=fxc,ls='-.',c='cyan',label=r'x=x$_c$')
 a0.axvline(x=f10xc,ls='-.',c='gray',label=r'x=10x$_c$')
 a0.set_xlabel(r"Linear Frequency [1/s]",fontsize=14)
 a0.set_ylabel("Normalized Complex Amplitude",fontsize=14)
