@@ -35,12 +35,12 @@ v0 = 0
 
 # Define time array and time steps
 dt = 0.001
-t = np.arange(0,700,dt) # s
+t = np.arange(0,60,dt) # s
 
 # Comppute the position of particles given inital positions
-x1 = Euler_Cromer1D(t,x01,v0,k,m,dt)
-x2 = Euler_Cromer1D(t,x02,v0,k,m,dt)
-x3 = Euler_Cromer1D(t,x03,v0,k,m,dt)
+x1 = Euler_Cromer1D(t,x01,v0,m,k,dt)
+x2 = Euler_Cromer1D(t,x02,v0,m,k,dt)
+x3 = Euler_Cromer1D(t,x03,v0,m,k,dt)
 
 fig, (a0,a1,a2) = plt.subplots(figsize=(8,6),nrows=3,\
                                 sharex=True)
@@ -56,7 +56,7 @@ a1.set_ylabel(r"X(t) (10$^7$m)",fontsize=14)
 a1.grid(ls='--')
 a1.legend()
 
-a2.plot(t,x3/1e9,c='gray',label=r"$x_0$=10$x_c$")
+a2.plot(t,x3/1e8,c='gray',label=r"$x_0$=10$x_c$")
 a2.set_ylabel("X(t) (10$^8$m)",fontsize=14)
 a2.set_xlabel("Time [s]", fontsize=14)
 a2.grid(ls='--')
@@ -88,6 +88,10 @@ G3 = np.abs(G3)/np.max(np.abs(G3))
 # # Generate frequency domain from time domain and timestep
 f = np.fft.fftshift(np.fft.fftfreq(len(t),dt))
 
+# Check the periods of each wave
+f1 = f[np.where(G1==np.max(G1))]
+print("Frequency x0=1",abs(f1),"Period:",abs(1/f1/2/np.pi) )
+
 # Plot results
 fig, a0 = plt.subplots(figsize=(8,4),ncols=1)
 a0.plot(f,G1,c='k',ls='--',label=r"$x_0$=1")
@@ -97,8 +101,8 @@ a0.set_xlabel(r"Angular Frequency $\omega$ [rad/s]",fontsize=14)
 a0.set_ylabel("Normalized Complex Amplitude",fontsize=14)
 a0.set_title("FFT of Relativistic Particle on a Spring",fontsize=16)
 a0.grid(ls='--')
-a0.set_xlim([-0.1,0.1])
-a0.legend()
+a0.set_xlim([-0.7,0.7])
+a0.legend(loc='upper left')
 plt.tight_layout()
 plt.savefig("Q1bplot.pdf")
 
@@ -116,7 +120,7 @@ plt.savefig("Q1bplot.pdf")
 Tf1 = 1/f[np.where(G1 == np.max(np.abs(G1)))[-1]]
 Tf2 = 1/f[np.where(G2 == np.max(np.abs(G2)))[-1]]
 Tf3 = 1/f[np.where(G3 == np.max(np.abs(G3)))[-1]]
-print(Tf1)
+
 # Initizlize periods from Lab03
 Tclassical = 1.8102536 # s
 T10xc = 11.6630122 # s
