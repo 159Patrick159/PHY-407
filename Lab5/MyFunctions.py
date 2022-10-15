@@ -15,12 +15,11 @@ def Euler_Cromer1D(t,x0,v0,m,k,dt):
 
     # Set intial conditions
     u1[0] = x0
-    u1dot[0] = v0
     u2[0] = v0
 
     # Run for loop from 1 to len(t)
     for i in range(1,len(t)):
-        u2dot[i] = -k/m*u1[i-1]*(1-(u2[i-1]**2/c**2))**(3/2)
+        u2dot[i] = (-k/m)*u1[i-1]*(1-(u2[i-1]**2/c**2))**(3/2)
         u2[i] = u2[i-1] + dt*u2dot[i]
 
         u1dot[i] = u2[i]
