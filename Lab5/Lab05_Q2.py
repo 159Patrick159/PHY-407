@@ -45,7 +45,6 @@ dt = 1/sample
 T = len(channel_0)*dt
 t = np.arange(0,T,dt)
 
-# ... do work on the data...
 fig, (a0,a1) = plt.subplots(figsize=(9,4),nrows=2)
 
 a0.plot(t,channel_0,c='k')
