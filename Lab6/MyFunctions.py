@@ -11,6 +11,7 @@ def ax(x,y,a,b,sigma,epsilon,m):
     term2 = (24*epsilon*sigma**6)/((x-a)**2 + (y-b)**2)**7
     return ((x-a)/m)*(term1 - term2)
 
+
 def ay(x,y,a,b,sigma,epsilon,m):
     '''Returns the y-component of the acceleration
     for a particle subject to a Lennard-Jones
@@ -32,68 +33,45 @@ def Verlet(t,dt,r01,r02):
     sigma = 1
     m = 1
     
-    # Initialize array of zeros
-    vx1 = np.zeros(len(t))
-    vy1 = np.zeros(len(t))
+    # Initialize arrays and set initial conditions
+    vx1 = [0]
+    vy1 = [0]
 
-    vx2 = np.zeros(len(t))
-    vy2 = np.zeros(len(t))
+    vx2 = [0]
+    vy2 = [0]
 
-    x1 = np.zeros(len(t))
-    y1 = np.zeros(len(t))
+    x1 = [r01[0]]
+    y1 = [r01[1]]
 
-    x2 = np.zeros(len(t))
-    y2 = np.zeros(len(t))
-    
-    # Set initial conditions
-    x1[0], y1[0] = r01[0], r01[1]
-    x2[0], y2[0] = r02[0], r02[1]
+    x2 = [r02[0]]
+    y2 = [r02[1]]
 
-    # Compute inital iteration for velocity
-    vx1[1] = vx1[0] + dt/2*ax(r01[0],r01[1],r02[0],r02[1],sigma,epsilon,m)/2
-    vy1[1] = vy1[0] + dt/2*ay(r01[0],r01[1],r02[0],r02[1],sigma,epsilon,m)/2
+    # Compute first term
+    v0x1 = vx1[0] + dt/2*ax(x1[0],y1[0],x2[0],y2[0],sigma,epsilon,m) 
+    v0y1 = vy1[0] + dt/2*ay(x1[0],y1[0],x2[0],y2[0],sigma,epsilon,m)
 
-    vx2[1] = vx2[0] + dt/2*ax(r02[0],r02[1],r01[0],r01[1],sigma,epsilon,m)/2
-    vy2[1] = vy2[0] + dt/2*ay(r02[0],r02[1],r01[0],r01[1],sigma,epsilon,m)/2  
-    
-    for i in range(len(t)-3):
-        # Implement method for particle 1
-        x1[i+2] = x1[i] + dt*vx1[i+1]
-        y1[i+2] = y1[i] + dt*vy1[i+1]
+    v0x2 = vx2[0] + dt/2*ax(x2[0],y2[0],x1[0],y1[0],sigma,epsilon,m) 
+    v0y2 = vy2[0] + dt/2*ay(x2[0],y2[0],x1[0],y1[0],sigma,epsilon,m)
 
-        # Implement method for particle 2
-        x2[i+2] = x2[i] + dt*vx2[i+1]
-        y2[i+2] = y2[i] + dt*vy2[i+1]
+    for i in range(len(t)-1):
+        x1.append(x1[i] + dt*v0x1)
+        y1.append(y1[i] + dt*v0y1)
 
-        # Compute vector k = a(t+dt)
-        kx1 = dt*ax(x1[i+2],y1[i+2],x2[i+2],y2[i+2],sigma,epsilon,m)/2
-        ky1 = dt*ay(x1[i+2],y1[i+2],x2[i+2],y2[i+2],sigma,epsilon,m)/2
+        x2.append(x2[i] + dt*v0x2)
+        y2.append(y2[i] + dt*v0y2)
 
-        # Compute vector k = a(t+dt)
-        kx2 = dt*ax(x2[i+2],y2[i+2],x1[i+2],y1[i+2],sigma,epsilon,m)/2
-        ky2 = dt*ay(x2[i+2],y2[i+2],x1[i+2],y1[i+2],sigma,epsilon,m)/2
+        k1x = dt * ax(x1[i+1],y1[i+1],x2[i+1],y2[i+1],sigma,epsilon,m)
+        k1y = dt * ay(x1[i+1],y1[i+1],x2[i+1],y2[i+1],sigma,epsilon,m)
 
-        # Compute velocity v(t+dt)
-        vx1[i+2] = vx1[i+1] + 0.5*kx1
-        vy1[i+2] = vy1[i+1] + 0.5*ky1
+        k2x = dt * ax(x2[i+1],y2[i+1],x1[i+1],y1[i+1],sigma,epsilon,m)
+        k2y = dt * ay(x2[i+1],y2[i+1],x1[i+1],y1[i+1],sigma,epsilon,m)
 
-        # Compute velocity v(t+dt)
-        vx2[i+2] = vx2[i+1] + 0.5*kx2
-        vy2[i+2] = vy2[i+1] + 0.5*ky2
+        v0x1 += k1x
+        v0y1 += k1y
 
-        # Compute velocity v(t+3t/2)
-        vx1[i+3] = vx1[i+1] + kx1
-        vy1[i+3] = vy1[i+1] + ky1
-    
-        # Compute velocity v(t+3t/2)
-        vx2[i+3] = vx2[i+1] + kx2
-        vy2[i+3] = vy2[i+1] + ky2
+        v0x2 += k2x
+        v0y2 += k2y
 
-    # Filter out the zeros in the array
-    x1 = x1[np.arange(0,len(t),2)]
-    y1 = y1[np.arange(0,len(t),2)]
-
-    x2 = x2[np.arange(0,len(t),2)]
-    y2 = y2[np.arange(0,len(t),2)]
-
-    return(x1,y1,x2,y2)
+        r1 = np.array([x1,y1])
+        r2 = np.array([x2,y2])
+    return(r1,r2)
