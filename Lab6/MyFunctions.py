@@ -1,4 +1,3 @@
-from re import A
 import numpy as np
 
 # Define acceleratino components from Q1a
