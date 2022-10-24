@@ -27,11 +27,11 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
-from MyFunctions import Verlet
+from MyFunctions import Verlet, Lennard_Jones, KE
 
 # Define time step 
 dt = 0.01
-t = np.arange(0,1000*dt,dt)
+t = np.arange(0,100*dt,dt)
 
 r11 = [4,4]
 r21 = [5.2,4]
@@ -42,9 +42,20 @@ r22 = [5.2,4]
 r13 = [2,3]
 r23 = [3.5,4.4]
 
-r1,r2 = Verlet(t,dt,r11,r21)
-r3,r4 = Verlet(t,dt,r12,r22)
-r5,r6 = Verlet(t,dt,r13,r23)
+r1,r2, v1, v2 = Verlet(t,dt,r11,r21)
+r3,r4, v3, v4 = Verlet(t,dt,r12,r22)
+r5,r6, v5, v6 = Verlet(t,dt,r13,r23)
+
+# Compute the total energy for 1st simulation
+V1 = Lennard_Jones(r1[0]-r2[0])
+T1 = KE(v1[0])
+
+V2 = Lennard_Jones(r2[0]-r1[0])
+T2 = KE(v2[0])
+
+E1 = T1 + V1
+E2 = T2 + V2
+Etot = E1 + E2
 
 fig, ((a0,a1,a2),(a3,a4,a5),(a6,a7,a8)) = plt.subplots(figsize=(12,6),ncols=3,nrows=3,\
                                         gridspec_kw={'height_ratios': [3, 1, 1]})
@@ -97,4 +108,16 @@ a8.set_xlabel("Time [s]")
 
 plt.tight_layout()
 plt.savefig("Q1a.pdf")
-plt.show()
+
+fig, (a0,a1,a2) = plt.subplots(figsize=(12,6),nrows=3,sharex=True)
+a0.set_title("Energy for Particle 1",fontsize=18)
+a0.plot(t,V1,c='k',label="Potential energy of particle 1")
+a1.plot(t,T1,c='r',label="Kinetic energy of particle 1")
+a2.plot(t,E1,c='gray',label="Total energy of particle")
+a2.set_xlabel("Time [s]",fontsize=16)
+a0.legend()
+a1.legend()
+a2.legend()
+fig.supylabel('Energy (Arbitrary Units)',fontsize=16)
+plt.subplots_adjust(hspace=0)
+plt.savefig("Q1c.pdf")
