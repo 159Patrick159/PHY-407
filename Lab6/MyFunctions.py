@@ -47,11 +47,11 @@ def Verlet(t,dt,r01,r02):
 
 
     # Compute first half-step velocity
-    v0x1 = vx1[0] + dt/2*ax(x1[0],y1[0],x2[0],y2[0],sigma,epsilon,m) 
-    v0y1 = vy1[0] + dt/2*ay(x1[0],y1[0],x2[0],y2[0],sigma,epsilon,m)
+    v0x1 = vx1[0] + dt/4*ax(x1[0],y1[0],x2[0],y2[0],sigma,epsilon,m) 
+    v0y1 = vy1[0] + dt/4*ay(x1[0],y1[0],x2[0],y2[0],sigma,epsilon,m)
 
-    v0x2 = vx2[0] + dt/2*ax(x2[0],y2[0],x1[0],y1[0],sigma,epsilon,m) 
-    v0y2 = vy2[0] + dt/2*ay(x2[0],y2[0],x1[0],y1[0],sigma,epsilon,m)
+    v0x2 = vx2[0] + dt/4*ax(x2[0],y2[0],x1[0],y1[0],sigma,epsilon,m) 
+    v0y2 = vy2[0] + dt/4*ay(x2[0],y2[0],x1[0],y1[0],sigma,epsilon,m)
 
     for i in range(len(t)-1):
         # Compute the next full step position for particle 1
@@ -62,11 +62,11 @@ def Verlet(t,dt,r01,r02):
         y2.append(y2[i] + dt*v0y2)
 
         # Compute the k vector components for particle 1
-        k1x = dt * ax(x1[i+1],y1[i+1],x2[i+1],y2[i+1],sigma,epsilon,m)
-        k1y = dt * ay(x1[i+1],y1[i+1],x2[i+1],y2[i+1],sigma,epsilon,m)
+        k1x = dt * ax(x1[i+1],y1[i+1],x2[i+1],y2[i+1],sigma,epsilon,m)/2
+        k1y = dt * ay(x1[i+1],y1[i+1],x2[i+1],y2[i+1],sigma,epsilon,m)/2
         # Compute the k vector components for particle 2
-        k2x = dt * ax(x2[i+1],y2[i+1],x1[i+1],y1[i+1],sigma,epsilon,m)
-        k2y = dt * ay(x2[i+1],y2[i+1],x1[i+1],y1[i+1],sigma,epsilon,m)
+        k2x = dt * ax(x2[i+1],y2[i+1],x1[i+1],y1[i+1],sigma,epsilon,m)/2
+        k2y = dt * ay(x2[i+1],y2[i+1],x1[i+1],y1[i+1],sigma,epsilon,m)/2
 
         # Compute the next full step velocity components for particle 1
         vx1.append(v0x1 + 0.5*k1x)
