@@ -102,7 +102,7 @@ def Verlet_multibody(t,dt,r0,v0,N):
     
     # Velocity array for each particle as a function of t
     vx_all_t = [v0[0]]
-    vy_all_t = [v0[0]]
+    vy_all_t = [v0[1]]
     
     #r_ij_all = []
     
@@ -110,10 +110,16 @@ def Verlet_multibody(t,dt,r0,v0,N):
     v0x_all = []
     v0y_all = []
     
+    K_t = []
+    V_t = []
     
+    total_potential_0 = 0
+    total_kinetic_0 = 0
+    # Compute first half-step velocity
     for i in range(N):
         ax_i = 0
         ay_i = 0
+        
         # Compute the acceleration of particle i due to all other particle j's
         for j in range(N):
             if not (j==i):
@@ -127,6 +133,13 @@ def Verlet_multibody(t,dt,r0,v0,N):
         # Append the first half-step velocity of array
         v0x_all.append(v0x_i)
         v0y_all.append(v0y_i)
+        
+        # Compute the initial potential energy
+        total_potential_0 += potential_multibody(x_all_t[0], y_all_t[0], i)
+        total_kinetic_0 += KE(np.sqrt(vx_all_t[0][i]**2 + vy_all_t[0][i]**2))
+    
+    K_t.append(total_kinetic_0)
+    V_t.append(total_potential_0)
     
     
     # Actual Verlet implementation for each particle
@@ -135,6 +148,9 @@ def Verlet_multibody(t,dt,r0,v0,N):
         y_all = []
         vx_all = []
         vy_all = []
+        
+        total_potential_t = 0
+        total_kinetic_t = 0
         
         for i in range(N):
             # Compute the next full step position for particle i
@@ -164,16 +180,35 @@ def Verlet_multibody(t,dt,r0,v0,N):
             # Compute the next half step velocity for particle i
             v0x_all[i] += kx_i
             v0y_all[i] += ky_i
+            
+            # Compute the subsequent potential energy
+            total_potential_t += potential_multibody(x_all_t[k], y_all_t[k], i)
+            total_kinetic_t += KE(np.sqrt(vx_all_t[k][i]**2 + vy_all_t[k][i]**2))
         
         # Complete 1 step in t, store all info in array of arrays
         vx_all_t.append(np.array(vx_all))
         vy_all_t.append(np.array(vy_all))
         
-        #print(f"{100*(k+1)*dt/t[-1] : .2f}% done")
+        V_t.append(total_potential_t)
+        K_t.append(total_kinetic_t)
         
-    return (np.array(x_all_t), np.array(y_all_t), np.array(vx_all_t), np.array(vy_all_t))
+        
+        
+        #print(f"{100*(k+1)*dt/t[-1] : .2f}% done")
+    E_t = np.array(V_t) + np.array(K_t)
+    return (np.array(x_all_t), np.array(y_all_t), np.array(vx_all_t), np.array(vy_all_t), E_t)
             
             
+def potential_multibody(x_all, y_all, i):
+    total_potential_i = 0
+    for j in range(len(x_all)):
+        if not (j==i):
+            dx = x_all[j] - x_all[i]
+            dy = y_all[j] - y_all[i]
+            r = np.sqrt(dx**2 + dy**2)
+            total_potential_i += Lennard_Jones(r)
+            
+    return total_potential_i
     
 
 def Lennard_Jones(r):

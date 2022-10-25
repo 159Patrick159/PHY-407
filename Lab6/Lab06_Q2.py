@@ -42,7 +42,7 @@ t = np.arange(0,T,dt)
 r_initial = np.array([x_initial, y_initial])
 v_initial = np.array([vx_initial, vy_initial])
 
-x_all_t, y_all_t, vx_all_t, vy_all_t = Verlet_multibody(t,dt,r_initial,v_initial,N)
+x_all_t, y_all_t, vx_all_t, vy_all_t, E_t = Verlet_multibody(t,dt,r_initial,v_initial,N)
 
 #%%
 fig, (a0,a1,a2) = plt.subplots(figsize=(12,16),ncols=1,nrows=3,\
@@ -69,51 +69,7 @@ for i in range(len(x_all_t[0])):
 plt.tight_layout()
 plt.savefig("Q2a.png")
 
-
-#%%
-r_all_t = []
-K_t = []
-V_t = []
-E_t = []
-
-# Calculate the kinetic energy of each particle as a function of time
-for k in range(len(x_all_t)):
-    K = 0
-    for i in range(len(x_all_t[0])):
-        v = np.sqrt(vx_all_t[k][i]**2 + vy_all_t[k][i]**2)
-        K += KE(v) 
-    K_t.append(K)
-K_t = np.array(K_t)
-
-
-
-# Calculate the distance from origin for each particle at each time t
-#for k in range(len(x_all_t)):
-#    r_all = []
-#    for i in range(len(x_all_t[0])):
-#        r_all.append(np.sqrt(x_all_t[k][i]**2 + y_all_t[k][i]**2))
-#    r_all_t.append(np.array(r_all))
-
-#r_all_t = np.array(r_all_t)
-
-# Calculate the potential energy of each particle as a function of time
-for k in range(len(x_all_t)):
-    V = 0
-    for i in range(len(x_all_t[0])):
-    #i = 0
-        for j in range(len(x_all_t[0])):
-            if not (j==i):
-                dx = x_all_t[k][i] - x_all_t[k][j]
-                dy = y_all_t[k][i] - y_all_t[k][j]
-                dr = np.sqrt(dx**2 + dy**2)
-                V += Lennard_Jones(dr)
-                
-    V_t.append(V)
-V_t = np.array(V_t)
-
-E_t = K_t + V_t
 avg = np.median(E_t)
-
 plt.figure(figsize=(8,8))
 plt.plot(t,E_t, 'r.')
 plt.plot(t, np.ones(len(t))*avg, 'k--', label='Mean Energy')
@@ -127,6 +83,8 @@ plt.legend()
 plt.tight_layout()
 plt.savefig("Q2b.png")
 plt.show() 
+
+
     
                 
 
