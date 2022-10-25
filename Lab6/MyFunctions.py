@@ -89,6 +89,93 @@ def Verlet(t,dt,r01,r02):
     v2 = np.array([vx2,vy2])
     return(r1,r2,v1,v2)
 
+
+def Verlet_multibody(t,dt,r0,v0,N):
+    # Define constants for simulation
+    epsilon = 1
+    sigma = 1
+    m = 1
+    
+    # Position array for each particle as a function of t
+    x_all_t = [r0[0]]
+    y_all_t = [r0[1]]
+    
+    # Velocity array for each particle as a function of t
+    vx_all_t = [v0[0]]
+    vy_all_t = [v0[0]]
+    
+    #r_ij_all = []
+    
+    # First half-step velocity array
+    v0x_all = []
+    v0y_all = []
+    
+    
+    for i in range(N):
+        ax_i = 0
+        ay_i = 0
+        # Compute the acceleration of particle i due to all other particle j's
+        for j in range(N):
+            if not (j==i):
+                ax_i += ax(x_all_t[0][i], y_all_t[0][i], x_all_t[0][j], y_all_t[0][j], sigma,epsilon,m)
+                ay_i += ay(x_all_t[0][i], y_all_t[0][i], x_all_t[0][j], y_all_t[0][j], sigma,epsilon,m)
+        
+        # Compute first half-step velocity for particle i
+        v0x_i = vx_all_t[0][i] + dt/2 * ax_i
+        v0y_i = vy_all_t[0][i] + dt/2 * ay_i
+        
+        # Append the first half-step velocity of array
+        v0x_all.append(v0x_i)
+        v0y_all.append(v0y_i)
+    
+    
+    # Actual Verlet implementation for each particle
+    for k in range(len(t)-1):
+        x_all = []
+        y_all = []
+        vx_all = []
+        vy_all = []
+        
+        for i in range(N):
+            # Compute the next full step position for particle i
+            x_all.append(x_all_t[k][i] + dt*v0x_all[i])
+            y_all.append(y_all_t[k][i] + dt*v0y_all[i])
+        
+        x_all_t.append(np.array(x_all))
+        y_all_t.append(np.array(y_all))
+        
+        for i in range(N):
+            ax_i = 0
+            ay_i = 0
+            # Compute the acceleration of particle i due to all other particle j's
+            for j in range(N):
+                if not (j==i):
+                    ax_i += ax(x_all_t[k+1][i], y_all_t[k+1][i], x_all_t[k+1][j], y_all_t[k+1][j], sigma,epsilon,m)
+                    ay_i += ay(x_all_t[k+1][i], y_all_t[k+1][i], x_all_t[k+1][j], y_all_t[k+1][j], sigma,epsilon,m)
+                    
+            # Compute the k vector components for particle i
+            kx_i = dt * ax_i
+            ky_i = dt * ay_i
+            
+            # Compute the next full step velocity components for particle i
+            vx_all.append(v0x_all[i] + 0.5*kx_i)
+            vy_all.append(v0y_all[i] + 0.5*ky_i)
+            
+            # Compute the next half step velocity for particle i
+            v0x_all[i] += kx_i
+            v0y_all[i] += ky_i
+        
+        # Complete 1 step in t, store all info in array of arrays
+        vx_all_t.append(np.array(vx_all))
+        vy_all_t.append(np.array(vy_all))
+        
+        #print(f"{100*(k+1)*dt/t[-1] : .2f}% done")
+        
+    return (np.array(x_all_t), np.array(y_all_t), np.array(vx_all_t), np.array(vy_all_t))
+            
+            
+    
+
 def Lennard_Jones(r):
     '''Returns the Lennar-Jones potential between two
     particles situated at (x1,y1) and (x2,y2), assuming 
