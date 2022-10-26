@@ -1,5 +1,9 @@
 import numpy as np
 
+############################### HEADER #######################################
+# This file contains all the self-written function used for Lab6
+##############################################################################
+
 # Define acceleratino components from Q1a
 def ax(x,y,a,b,sigma,epsilon,m):
     '''Returns the x-component of the acceleration
@@ -89,117 +93,126 @@ def Verlet(t,dt,r01,r02):
     v2 = np.array([vx2,vy2])
     return(r1,r2,v1,v2)
 
-
+# Verlet method used for multi-body simulation
 def Verlet_multibody(t,dt,r0,v0,N):
+    """
+    Parameters:  t: Time array
+                dt: Time steps
+                r0: [x0,y0], initial positions for all N particles
+                v0: [vx0,vy0], initial velocities for all N particles
+                 N: Number of particles simulating
+
+    Returns: x_all_t: 2D numpy array containing x-pos for all N particles for all time t
+             y_all_t: 2D numpy array containing y-pos for all N particles for all time t
+           vx_all_t : 2D numpy array containing full-step x-vel for all N particles for all time t
+           vy_all_t : 2D numpy array containing full-step y-vel for all N particles for all time t
+       vxhalf_all_t : 2D numpy array containing half-step x-vel for all N particles for all time t
+       vyhalf_all_t : 2D numpy array containing half-step y-vel for all N particles for all time t
+                V_t : Potential energy of system as a function of time
+                K_t : Kinetic energy of system as a function of time
+    """
     # Define constants for simulation
     epsilon = 1
     sigma = 1
     m = 1
     
-    # Position array for each particle as a function of t
-    x_all_t = [r0[0]]
-    y_all_t = [r0[1]]
+    # Full step position arrays for each particle as a function of t 
+    #[Particle i][Time k]
+    x_all_t = np.zeros((N, len(t)))
+    y_all_t = np.zeros((N, len(t)))
     
-    # Velocity array for each particle as a function of t
-    vx_all_t = [v0[0]]
-    vy_all_t = [v0[1]]
+    # Full step velocity arrays for each particle as a function of t
+    #[Particle i][Time k]
+    vx_all_t = np.zeros((N, len(t)))
+    vy_all_t = np.zeros((N, len(t)))
     
-    #r_ij_all = []
+    # Half-step velocity arrays for each particle as a function of t
+    #[Particle i][Time k]
+    vxhalf_all_t = np.zeros((N, len(t)))
+    vyhalf_all_t = np.zeros((N, len(t)))
     
-    # First half-step velocity array
-    v0x_all = []
-    v0y_all = []
+    # (Full-step) energy arrays for entire system as a function of t
+    #[Time k]
+    V_t = np.zeros(len(t))
+    K_t = np.zeros(len(t))
     
-    K_t = []
-    V_t = []
+    # Set initial conditions for all N particles from input
+    x_all_t[:, 0] = r0[0]
+    y_all_t[:, 0] = r0[1]
+    vx_all_t[:, 0] = v0[0]
+    vy_all_t[:, 0] = v0[1]
     
-    total_potential_0 = 0
-    total_kinetic_0 = 0
-    # Compute first half-step velocity
+    # Calculate initial potential energy and kinetic energy
     for i in range(N):
-        ax_i = 0
-        ay_i = 0
-        
-        # Compute the acceleration of particle i due to all other particle j's
-        for j in range(N):
-            if not (j==i):
-                ax_i += ax(x_all_t[0][i], y_all_t[0][i], x_all_t[0][j], y_all_t[0][j], sigma,epsilon,m)
-                ay_i += ay(x_all_t[0][i], y_all_t[0][i], x_all_t[0][j], y_all_t[0][j], sigma,epsilon,m)
-        
-        # Compute first half-step velocity for particle i
-        v0x_i = vx_all_t[0][i] + dt/2 * ax_i
-        v0y_i = vy_all_t[0][i] + dt/2 * ay_i
-        
-        # Append the first half-step velocity of array
-        v0x_all.append(v0x_i)
-        v0y_all.append(v0y_i)
-        
-        # Compute the initial potential energy
-        total_potential_0 += potential_multibody(x_all_t[0], y_all_t[0], i)
-        total_kinetic_0 += KE(np.sqrt(vx_all_t[0][i]**2 + vy_all_t[0][i]**2))
+        V_t[0] += potential_multibody(x_all_t[:,0], y_all_t[:,0], i)
+        K_t[0] += KE(np.sqrt(vx_all_t[i][0]**2 + vy_all_t[i][0]**2))
     
-    K_t.append(total_kinetic_0)
-    V_t.append(total_potential_0)
-    
-    
-    # Actual Verlet implementation for each particle
-    for k in range(len(t)-1):
-        x_all = []
-        y_all = []
-        vx_all = []
-        vy_all = []
+    # Calculate the initial half-step velocity (Eq.8) and potential energy
+    for i in range(N):
+        ax_i, ay_i = acceleration_multibody(x_all_t[:,0], y_all_t[:,0], i, sigma,epsilon,m)
+        vxhalf_all_t[i][0] = vx_all_t[i][0] + 0.5*dt*ax_i
+        vyhalf_all_t[i][0] = vy_all_t[i][0] + 0.5*dt*ay_i
         
-        total_potential_t = 0
-        total_kinetic_t = 0
+    
+    # (Actual implementation of Verlet method) 
+    # Looping over time step from 1 to T (shift index fwd once)
+    for k in range(1,len(t)):
         
+        # Calculate position of all particles (Eq.9)
         for i in range(N):
-            # Compute the next full step position for particle i
-            x_all.append(x_all_t[k][i] + dt*v0x_all[i])
-            y_all.append(y_all_t[k][i] + dt*v0y_all[i])
+            x_all_t[i][k] = x_all_t[i][k-1] + dt * vxhalf_all_t[i][k-1]
+            y_all_t[i][k] = y_all_t[i][k-1] + dt * vyhalf_all_t[i][k-1]
         
-        x_all_t.append(np.array(x_all))
-        y_all_t.append(np.array(y_all))
-        
+        # Update full-step and half-step velocities of all particles
         for i in range(N):
-            ax_i = 0
-            ay_i = 0
-            # Compute the acceleration of particle i due to all other particle j's
-            for j in range(N):
-                if not (j==i):
-                    ax_i += ax(x_all_t[k+1][i], y_all_t[k+1][i], x_all_t[k+1][j], y_all_t[k+1][j], sigma,epsilon,m)
-                    ay_i += ay(x_all_t[k+1][i], y_all_t[k+1][i], x_all_t[k+1][j], y_all_t[k+1][j], sigma,epsilon,m)
-                    
-            # Compute the k vector components for particle i
-            kx_i = dt * ax_i
-            ky_i = dt * ay_i
+            ax_i_cur, ay_i_cur = acceleration_multibody(x_all_t[:,k], y_all_t[:,k], i, sigma,epsilon,m)
             
-            # Compute the next full step velocity components for particle i
-            vx_all.append(v0x_all[i] + 0.5*kx_i)
-            vy_all.append(v0y_all[i] + 0.5*ky_i)
+            # Compute the k vector components for particle i (Eq.10)
+            kx_i = dt * ax_i_cur
+            ky_i = dt * ay_i_cur
             
-            # Compute the next half step velocity for particle i
-            v0x_all[i] += kx_i
-            v0y_all[i] += ky_i
+            # Compute the full-step velocity for particle i (Eq.11)
+            vx_all_t[i][k] = vx_all_t[i][k-1] + 0.5 * kx_i
+            vy_all_t[i][k] = vy_all_t[i][k-1] + 0.5 * ky_i
             
-            # Compute the subsequent potential energy
-            total_potential_t += potential_multibody(x_all_t[k], y_all_t[k], i)
-            total_kinetic_t += KE(np.sqrt(vx_all_t[k][i]**2 + vy_all_t[k][i]**2))
+            # Compute the half-step velocity for particle i (Eq.12)
+            vxhalf_all_t[i][k] = vxhalf_all_t[i][k-1] + kx_i
+            vyhalf_all_t[i][k] = vyhalf_all_t[i][k-1] + ky_i
         
-        # Complete 1 step in t, store all info in array of arrays
-        vx_all_t.append(np.array(vx_all))
-        vy_all_t.append(np.array(vy_all))
-        
-        V_t.append(total_potential_t)
-        K_t.append(total_kinetic_t)
-        
-        
-        
+            # Calculate the total energy of the system at this time step
+            V_t[k] += potential_multibody(x_all_t[:,k], y_all_t[:,k], i)
+            K_t[k] += KE(np.sqrt(vx_all_t[i][k]**2 + vy_all_t[i][k]**2))
+       
         #print(f"{100*(k+1)*dt/t[-1] : .2f}% done")
-    E_t = np.array(V_t) + np.array(K_t)
-    return (np.array(x_all_t), np.array(y_all_t), np.array(vx_all_t), np.array(vy_all_t), E_t)
+    return x_all_t, y_all_t, vx_all_t, vy_all_t, vxhalf_all_t, vyhalf_all_t, V_t, K_t
+        
+        
+# Calculate Acceleration in multi-body simulation
+def acceleration_multibody(x_all, y_all, i, sigma,epsilon,m):
+    """
+    Parameters: x_all : 1D numpy array containing x-pos for all N particles at set t-value
+                y_all : 1D numpy array containing y-pos for all N particles at set t-value
+                    i : The ith particle for the loop
+    sigma, epsilon, m : Physical variables
+    Returns: ax_i, ay_i: Acceleratioin x and y of the ith particles
+    """
+    ax_i = 0
+    ay_i = 0
+    for j in range(len(x_all)):
+        if not (j==i):
+            ax_i += ax(x_all[i], y_all[i], x_all[j], y_all[j], sigma,epsilon,m)
+            ay_i += ay(x_all[i], y_all[i], x_all[j], y_all[j], sigma,epsilon,m)
+    
+    return (ax_i, ay_i)
             
-            
+# Calculate the potential energy per particle in multi-body simulation
 def potential_multibody(x_all, y_all, i):
+    """
+    Parameters: x_all : 1D numpy array containing x-pos for all N particles at set t-value
+                y_all : 1D numpy array containing y-pos for all N particles at set t-value
+                    i : The ith particle for the loop
+    Returns: total_potential_i : Potential energy of the ith particles
+    """
     total_potential_i = 0
     for j in range(len(x_all)):
         if not (j==i):
