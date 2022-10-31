@@ -64,9 +64,9 @@ for nval in n:
         print("|Psi|^2 = ",simps(np.power(psi2,2),r_domain))
         a0.plot(r_domain,psi2,c=color[i],label=f'R(r) for l={lval}, n={nval}')
         a0.legend()
-        a0.set_xlabel("Radial Distance (m)")
-        a0.set_ylabel("R(r)")
-        a0.set_title("Hydrogen Atom Radial Solution")
+        a0.set_xlabel("Radial Distance (m)",fontsize=16)
+        a0.set_ylabel("R(r)",fontsize=16)
+        a0.set_title("Hydrogen Atom Radial Solution",fontsize=18)
         i += 1
         print()
 a0.xaxis.set_minor_locator(MultipleLocator(2e-11))
