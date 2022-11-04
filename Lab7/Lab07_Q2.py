@@ -5,7 +5,7 @@
 ######################################## HEADER ########################################
 # This python script holds the code, pseudo-code and plots for Q2 of Lab07 for 
 # finding the energy eigenvalues and radial eigenfunctions of the Hydrogen atom.
-######################################### Q1b/c ###########################################
+######################################### Q2b/c ###########################################
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator
