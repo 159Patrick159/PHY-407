@@ -56,10 +56,11 @@ C = del_t/2/del_x
 tend = 5
 t = 0.0
 
-#fig, a0 = plt.subplots(figsize=(8,6))
-# a0.plot(x_domain,eta,label=rf"$\eta$(x,{t1})",marker='o',c='b',alpha=0.6)
 plt.plot(x_domain,eta,marker='o',c='b',alpha=0.6)
 plt.fill_between(x_domain,y1=0,y2=eta,color='blue',alpha=0.4)
+plt.title(f"Shallow Water Simulation t=0s")
+plt.xlabel("Spatial Dimension (m)")
+plt.ylabel("Free Surface Altitude")
 plt.xlim([0,1])
 plt.ylim([0,0.02])
 plt.savefig("Q2_0s.pdf")
@@ -97,14 +98,7 @@ while t < tend:
     if abs(t-t3) < epsilon:
         plt.savefig("Q2_4s.pdf")
     draw()
-    pause(0.01)
-
-
-#plt.legend()
-#plt.tight_layout()
-#plt.savefig("Q2aPlot.pdf")
-#plt.show()
-
+    pause(0.005)
 
 
 
