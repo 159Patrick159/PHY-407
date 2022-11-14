@@ -7,7 +7,21 @@
 # the simulation of shallow water using a flux conservative partial differetial   #
 # equation of the 1D shallow water equation.                                      #
 ###################################################################################
-
+# Pseudo-code
+# Import needed libraries
+# Define simulation parameters and physical constants
+# Initialize solution arrays for mu and eta given grid spacing
+# Define boundary conditions
+# Define initial condition for mu and eta
+# Start iterating through time with while loop
+# Iterate through each particle spatially with for loop
+# Use forward difference for lower bound
+# Use backward difference for upper bound
+# Use FTCS for everything else
+# Overwrite prev. sol with current solution
+# Increase time-step by dt
+# Plot current solution for animation
+# Check time for t=1,4 for saving fig
 ####################################### Q2b #######################################
 import numpy as np
 import matplotlib.pyplot as plt
@@ -58,11 +72,12 @@ t = 0.0
 
 plt.plot(x_domain,eta,marker='o',c='b',alpha=0.6)
 plt.fill_between(x_domain,y1=0,y2=eta,color='blue',alpha=0.4)
-plt.title(f"Shallow Water Simulation t=0s")
-plt.xlabel("Spatial Dimension (m)")
-plt.ylabel("Free Surface Altitude")
+plt.title(f"Shallow Water Simulation t=0s",fontsize=16)
+plt.xlabel("Spatial Dimension (m)",fontsize=14)
+plt.ylabel("Free Surface Altitude",fontsize=14)
 plt.xlim([0,1])
 plt.ylim([0,0.02])
+plt.tight_layout()
 plt.savefig("Q2_0s.pdf")
 
 
@@ -86,19 +101,20 @@ while t < tend:
     eta, etap = etap, eta
     t += del_t
     clf()
-    plt.title(f"Shallow Water Simulation t={round(t,3)}s")
-    plt.xlabel("Spatial Dimension (m)")
-    plt.ylabel("Free Surface Altitude")
-    plt.plot(x_domain,eta,label=r"$\eta$(x,t)",marker='o',c='blue',alpha=0.6)
-    plt.fill_between(x_domain,y1=0,y2=eta,color='blue',alpha=0.4)
+    plt.title(f"Shallow Water Simulation t={round(t,3)}s",fontsize=16)
+    plt.xlabel("Spatial Dimension (m)",fontsize=14)
+    plt.ylabel("Free Surface Altitude",fontsize=14)
+    plt.plot(x_domain,eta,label=r"$\eta$(x,t)",marker='o',c='b',alpha=0.6)
+    plt.fill_between(x_domain,y1=0,y2=eta,color='b',alpha=0.4)
     plt.xlim([0,1])
     plt.ylim([0,0.02])
+    plt.tight_layout()
     if abs(t-t2) < epsilon:
-         plt.savefig("Q2_1s.pdf")
+        plt.savefig("Q2_1s.pdf")
     if abs(t-t3) < epsilon:
         plt.savefig("Q2_4s.pdf")
     draw()
-    pause(0.005)
+    pause(0.001)
 
 
 
