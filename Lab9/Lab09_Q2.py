@@ -251,8 +251,8 @@ x3_tar = int(0.5/dx)
 y3_tar = int(0.5/dx)
 
 # Collect solutions
-HxPlotSol = HxSol[:,y1_tar,x1_tar]
-HyPlotSol = HySol[:,y2_tar,x2_tar]
+HxPlotSol = HxSol[:,y2_tar,x2_tar]
+HyPlotSol = HySol[:,y1_tar,x1_tar]
 EzPlotSol = EzSol[:,y3_tar,x3_tar]
 
 fig, (a0,a1,a2) = plt.subplots(figsize=(12,3),ncols=3)
@@ -266,7 +266,7 @@ a2.plot(t,EzPlotSol,c="r")
 a2.set_xlabel("Time [s]")
 a2.set_ylabel(r"E$_z$(x=0.5,y=0.5)")
 plt.tight_layout()
-plt.savefig("Lab9/Q2bPlots.pdf")
+#plt.savefig("Lab9/Q2bPlots.pdf")
 plt.show()
 
 
