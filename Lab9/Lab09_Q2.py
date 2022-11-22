@@ -280,7 +280,7 @@ for sol in EzSol:
     ylim([0,Ly])
     plt.xlabel("X",fontsize=16)
     plt.ylabel("Y",fontsize=16)
-    plt.title("Oscillating Electric Field",fontsize=18)
+    plt.title(r"Oscillating E$_z$ Field",fontsize=18)
     plt.tight_layout()
     draw()
     pause(0.001)
