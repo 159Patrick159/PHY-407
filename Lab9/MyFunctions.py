@@ -47,13 +47,46 @@ def calc_normalization_constant(f, N, a, b, x0, sigma, kappa):
     x, w = gaussxwab(N, a, b)
     total = 0
     for i in range(len(x)):
-        total += w[i] * np.conjugate(f(x[i],x0,sigma,kappa)) * f(x[i],x0,sigma,kappa)
+        total += w[i] * np.dot(np.conjugate(f(x[i],x0,sigma,kappa)), f(x[i],x0,sigma,kappa))
     return total
 
 def psi(x, x0, sigma, kappa):
     return np.exp(-(x - x0)**2/(4*sigma**2) + kappa*x* 1j)
 
 
+def calc_exp_X(psi, x, h):
+    exp_X = np.zeros(len(psi))
+    for n in range(len(psi)):
+        exp_X[n] = simpsons(np.real(np.conj(psi[n]) * x * psi[n]), h)
+        
+    return exp_X
 
+def calc_exp_E(psi, Hamiltonian, h):
+    exp_E = np.zeros(len(psi))
+    for n in range(len(psi)):
+        integrand = np.matmul(np.conj(psi[n]), np.matmul(Hamiltonian, psi[n]))
+        exp_E[n] = h * np.real(integrand) # Constant integration
+        
+    return exp_E
 
+def calc_normalization_factor(psi, h):
+    norm_t = np.zeros(len(psi))
+    for n in range(len(psi)):
+        norm_t[n] = simpsons(np.real(np.conj(psi[n]) * psi[n]), h)
+        
+    return norm_t
+
+def simpsons(f, h):
+    """
+    Simpson integration method.
+    """
+    odd = 0
+    even = 0
+    for k in range(1, len(f) - 1):
+        if k % 2 == 0:
+            even += 4 * f[k]
+        else:
+            odd += 2 * f[k]
+
+    return h / 3 * (f[0] + f[-1] + even + odd)
 
