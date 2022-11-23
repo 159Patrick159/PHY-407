@@ -1,7 +1,18 @@
+########################## 
+# Contributors           # 
+# Patrick Sandoval       #
+# Kelvin Leong           #
+##########################
 
+################################# HEADER ##########################################
+# This python script holds the code and plots for Q1 of Lab09 which solves the    #
+# the time-dependent Schrodinger equation using Crank-Nicolson method             #
+###################################################################################
+
+# Import the necessary libary 
 import numpy as np
 import matplotlib.pyplot as plt
-from MyFunctions import calc_normalization_constant, V, psi, calc_exp_X, calc_exp_E, calc_normalization_factor
+from MyFunctions import calc_normalization_constant, V, psi_init, calc_exp_X, calc_exp_E, calc_normalization_factor
 
 # Constants
 h_bar = 1.055e-34   #[m^2 kg/s]
@@ -43,8 +54,8 @@ for i in range(len(p_arr)):
 
 # Define the initial (t=0) wave fucntion from psi_1 to psi_{P-1}
 # and normalize it (using relation in eq3)
-psi_0 = psi(x_p_arr, x0, sigma, kappa)
-nor_const = calc_normalization_constant(psi, P, -L/2, L/2, x0, sigma, kappa)
+psi_0 = psi_init(x_p_arr, x0, sigma, kappa)
+nor_const = calc_normalization_constant(psi_init, P, -L/2, L/2, x0, sigma, kappa)
 psi_0_nor = psi_0 / np.sqrt(nor_const)
 
 # Construct L and R matrices used for Crank-Nicolson time-stepper method
@@ -64,6 +75,7 @@ for n in range(N):
 print("Finished solving time-dependent Schrodinger equation")
 #%%
 ################################### Q1b ######################################
+# Define position and time domain for plotting and calculating other quantities
 x_domain = x_p_arr
 t_domain = np.linspace(0, T, N+1)
 
@@ -83,6 +95,7 @@ plt.grid('on')
 plt.legend()
 plt.savefig("Q1a.png")
 
+# Calculate position expectation value
 exp_X_t = calc_exp_X(psi_all, x_domain, a)
 print("Finished calculating position expectation value")
 
@@ -95,8 +108,11 @@ plt.grid('on')
 plt.savefig("Q1b.png")
 #%%
 ################################### Q1c ######################################
+# Calculate energy expectation value
 exp_E_t = calc_exp_E(psi_all, Hamiltonian, a)
 print("Finished calculating energy")
+
+# Calculate normalization value over time
 norm_t = calc_normalization_factor(psi_all, a)
 print("Finished calculating normalization factor")
 
@@ -104,6 +120,8 @@ plt.figure(figsize=(10, 10))
 plt.plot(t_domain, exp_E_t)
 plt.xlabel("Time domain", fontsize=16)
 plt.ylabel("Energy", fontsize=16)
+plt.title("Energy evolution in the system", fontsize=16)
+plt.ylim([0, 2e-17])
 plt.grid('on')
 plt.savefig("Q1c_1.png")
 
@@ -111,6 +129,8 @@ plt.figure(figsize=(10, 10))
 plt.plot(t_domain, norm_t)
 plt.xlabel("Time domain", fontsize=16)
 plt.ylabel("Normalization factor", fontsize=16)
+plt.title("Normalization of the wavefunction", fontsize=16)
+plt.ylim([0.95, 1.05])
 plt.grid('on')
 plt.savefig("Q1c_2.png")
  

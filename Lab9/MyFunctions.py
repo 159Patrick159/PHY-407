@@ -1,19 +1,18 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Nov 21 16:19:28 2022
+################################# HEADER ##########################################
+# This python script holds self defined function used to help solving the         #
+# in time-dependent Schrodinger Equation in part 1
+###################################################################################
 
-@author: kelvinleong
-"""
 import numpy as np
 
+# Define potential function, infinte well in this case with mask function
 def V(x_arr, a, b):
     mask = np.logical_or(x_arr < a, x_arr > b)
     mask = mask.astype(int) * 1e308     # Using largest floating point to represent infinity
     return mask
             
 
-# Define Gaussian quad functions from textbook 
+# Define Gaussian quad functions from textbook (import from lab3)
 def gaussxw(N):
     # Initial approximation to roots of the Legendre polynomial
     a = np.linspace(3,4*N-1,N)/(4*N+2)
@@ -41,6 +40,7 @@ def gaussxwab(N,a,b):
     x,w = gaussxw(N)
     return 0.5*(b-a)*x+0.5*(b+a),0.5*(b-a)*w
 
+# Calculate the normalization constant for inital wave function
 def calc_normalization_constant(f, N, a, b, x0, sigma, kappa):
     # Use gaussian quadrature to calculate the normalization integral
     # eq.3
@@ -50,10 +50,11 @@ def calc_normalization_constant(f, N, a, b, x0, sigma, kappa):
         total += w[i] * np.dot(np.conjugate(f(x[i],x0,sigma,kappa)), f(x[i],x0,sigma,kappa))
     return total
 
-def psi(x, x0, sigma, kappa):
+# Calculate the initial wavefunction (unnormalized) based on the given initial conditions
+def psi_init(x, x0, sigma, kappa):
     return np.exp(-(x - x0)**2/(4*sigma**2) + kappa*x* 1j)
 
-
+# Calculate the expectation value of X as a function of time
 def calc_exp_X(psi, x, h):
     exp_X = np.zeros(len(psi))
     for n in range(len(psi)):
@@ -61,6 +62,7 @@ def calc_exp_X(psi, x, h):
         
     return exp_X
 
+# Calculate the expectation value of E as a function of time
 def calc_exp_E(psi, Hamiltonian, h):
     exp_E = np.zeros(len(psi))
     for n in range(len(psi)):
@@ -69,6 +71,7 @@ def calc_exp_E(psi, Hamiltonian, h):
         
     return exp_E
 
+# Calculate the normalization value as a function of time
 def calc_normalization_factor(psi, h):
     norm_t = np.zeros(len(psi))
     for n in range(len(psi)):
@@ -76,6 +79,7 @@ def calc_normalization_factor(psi, h):
         
     return norm_t
 
+# Simpson integration method, modified from lab2
 def simpsons(f, h):
     """
     Simpson integration method.
