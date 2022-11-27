@@ -36,7 +36,7 @@ sum = 0
 L = 2**dof
 
 for i in range(int(N)):
-    # Generate 10 randomom number from -1 to 1
+    # Generate dof random numbers within region (-1,1)
     xi = np.array([(b-a)*random() + a for _ in range(dof)])
     # Compute function for random numbers
     y = f(xi)
