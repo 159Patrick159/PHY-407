@@ -32,7 +32,7 @@ dof = 10
 # Define sum variable
 sum = 0
 
-# Define lenght of hypercube enclosing hypersphere
+# Define volume of hypercube enclosing hypersphere
 L = 2**dof
 
 for i in range(int(N)):

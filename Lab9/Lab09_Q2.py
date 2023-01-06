@@ -272,15 +272,65 @@ plt.show()
 
 # The following code animates the EM cavity its really cool
 from pylab import clf, plot, xlim, ylim, show, pause, draw
-for sol in EzSol:
-    clf()
-    plt.contourf(x_domain,y_domain,sol,cmap='inferno',vmin=np.min(EzSol),vmax=np.max(EzSol))
-    plt.colorbar()
-    xlim([0,Lx])
-    ylim([0,Ly])
-    plt.xlabel("X",fontsize=16)
-    plt.ylabel("Y",fontsize=16)
-    plt.title(r"Oscillating E$_z$ Field",fontsize=18)
-    plt.tight_layout()
-    draw()
-    pause(0.001)
+from matplotlib import animation
+
+fig =  plt.figure(figsize=(6,6))
+ax1 = plt.subplot(2,2,1)   
+ax2 = plt.subplot(2,2,2)   
+ax3 = plt.subplot(2,2,3)
+
+ax1.set_xlim(( 0, 1))            
+ax1.set_ylim((0, 1))
+ax1.set_xlabel("X")
+ax1.set_ylabel("Y")
+ax1.set_title(r"E$_z$")
+
+ax2.set_xlim(( 0, 1))            
+ax2.set_ylim((0, 1))
+ax2.set_xlabel("X")
+ax2.set_ylabel("Y")
+ax2.set_title("H$_x$")
+
+ax3.set_xlim(( 0, 1))            
+ax3.set_ylim((0, 1))
+ax3.set_xlabel("X")
+ax3.set_ylabel("Y")
+ax3.set_title("H$_y$")
+
+# initialization function: plot the background of each frame
+# a=np.random.random((5,5))
+# im=plt.imshow(a)
+# def init():
+#     im.set_data(np.random.random((5,5)))
+#     return [im]
+
+im1 = ax1.imshow(EzSol[0],cmap='inferno',vmin=np.min(EzSol),vmax=np.max(EzSol))
+im2 = ax2.imshow(HxSol[0],cmap='inferno',vmin=np.min(HxSol),vmax=np.max(EzSol))
+im3 = ax3.imshow(HySol[0],cmap='inferno',vmin=np.min(HySol),vmax=np.max(HySol))
+plt.tight_layout()
+
+def drawframe(n):
+    im1.set_array(EzSol[n])
+    im2.set_array(HxSol[n])
+    im3.set_array(HySol[n])
+    return (im1,im2,im3)
+
+anim = animation.FuncAnimation(fig, drawframe, frames=EzSol.shape[0], interval=20, blit=True)
+writergif = animation.PillowWriter(fps=30)
+anim.save('filename.gif',writer=writergif)
+# from IPython.display import HTML
+# HTML(anim.to_html5_video())
+
+
+# for sol in EzSol:
+#     clf()
+#     plt.contourf(x_domain,y_domain,sol,cmap='inferno',vmin=np.min(EzSol),vmax=np.max(EzSol))
+#     plt.colorbar()
+#     xlim([0,Lx])
+#     ylim([0,Ly])
+#     plt.xlabel("X",fontsize=16)
+#     plt.ylabel("Y",fontsize=16)
+#     plt.title(r"Oscillating E$_z$ Field",fontsize=18)
+#     plt.tight_layout()
+#     draw()
+#     pause(0.001)
