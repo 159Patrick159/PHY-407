@@ -114,7 +114,7 @@ while t < tend:
     if abs(t-t3) < epsilon:
         plt.savefig("Q2_4s.pdf")
     draw()
-    pause(0.001)
+    pause(0.00001)
 
 
 
