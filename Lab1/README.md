@@ -1,6 +1,6 @@
 # Lab 1: Basic Python
 This sub-directory contains the python scripts and written report for Lab 1 for Computational Physics. The breakdown of the lab is the following:
----
+
 ## Q1 - Modelling Planetary Orbits Through Euler-Cromer Method
 We use two frameworks to model mercuries orbit the first one being Newtonian dynamics and the second one being general relativity. In both cases we use the Euler-Cromer method to solve the differential equations at hand.
 <p align='center'>
